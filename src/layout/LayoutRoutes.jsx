@@ -7,6 +7,7 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import FAQ from "../pages/FAQ";
 import Auth from "../pages/Auth";
+import Report from "../pages/Report";
 
 export default function LayoutRoutes() {
   const [showHeaderNav, setShowHeaderNav] = useState(true);
@@ -47,6 +48,8 @@ export default function LayoutRoutes() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/login" element={<Auth />} />
+          <Route path="/register" element={<Auth />} />
+          <Route path="/report" element={<Report />} />
           <Route path="/*" element={<Home />} />
         </Routes>
         <Footer />

@@ -6,11 +6,18 @@ import { RiLockPasswordLine } from "react-icons/ri";
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
+  const handleCheckboxChange =()=>{
+    if(rememberMe===false){
+      setRememberMe(true)
+    }else{
+      setRememberMe(false)
+    }
+  }
   return (
     <div className="">
       <form className="space-y-5 ">
         <div>
-          <div className="border-2 flex p-2 rounded-md gap-x-2">
+          <div className="border-2 flex p-3 rounded-md gap-x-2">
             <CiAt className="text-2xl text-black" />
             <input
               type="email"
@@ -25,7 +32,7 @@ export default function Login() {
           </div>
         </div>
         <div>
-          <div className="border-2 flex p-2 rounded-md gap-x-2">
+          <div className="border-2 flex p-3 rounded-md gap-x-2">
             <RiLockPasswordLine className="text-2xl text-black" />
             <input
               type="password"
@@ -45,15 +52,15 @@ export default function Login() {
               type="checkbox"
               id="rememberMe"
               checked={rememberMe}
-              // onChange={handleCheckboxChange}
+              onChange={handleCheckboxChange}
               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label htmlFor="rememberMe" className="text-gray-700 text-sm">
+            <label htmlFor="rememberMe" className="text-gray-700 md:text-lg text-md">
               Remember Me
             </label>
           </div>
           <div>
-            <h2 className="text-md text-yellow-500">Forgot password?</h2>
+            <h2 className="md:text-lg text-md text-yellow-500">Forgot password?</h2>
           </div>
         </div>
         <div>
