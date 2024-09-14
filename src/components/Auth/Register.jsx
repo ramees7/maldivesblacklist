@@ -27,7 +27,7 @@ export default function Register() {
               name="name"
               // value={formData.name}
               // onChange={handleChange}
-              className="focus:outline-none bg-[#f2f2f2] w-full"
+              className="focus:outline-none bg-[#f2f2f2] w-full placeholder-black"
               placeholder="Username*"
               required
             />
@@ -42,7 +42,7 @@ export default function Register() {
               name="email"
               // value={formData.name}
               // onChange={handleChange}
-              className="focus:outline-none bg-[#f2f2f2] w-full"
+              className="focus:outline-none bg-[#f2f2f2] w-full placeholder-black"
               placeholder="Email Address*"
               required
             />
@@ -57,7 +57,7 @@ export default function Register() {
               name="phone"
               // value={formData.name}
               // onChange={handleChange}
-              className="focus:outline-none bg-[#f2f2f2] w-full"
+              className="focus:outline-none bg-[#f2f2f2] w-full placeholder-black"
               placeholder="Phone Number*"
               required
             />
@@ -72,7 +72,7 @@ export default function Register() {
               name="password"
               // value={formData.name}
               // onChange={handleChange}
-              className="focus:outline-none bg-[#f2f2f2] w-full"
+              className="focus:outline-none bg-[#f2f2f2] w-full placeholder-black"
               placeholder="Password*"
               required
             />
@@ -85,7 +85,7 @@ export default function Register() {
               id="rememberMe"
               checked={rememberMe}
               onChange={handleCheckboxChange}
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 placeholder-black"
             />
             <label htmlFor="rememberMe" className="text-gray-700 md:text-lg text-md">
               I accept the

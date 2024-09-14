@@ -8,6 +8,7 @@ import UserExperience from "../components/Home/UserExperience";
 import PartnersCarousel from "../components/Home/PartnersCarousel";
 
 export default function About() {
+  const arr=["dsgfg","sdgfd","sdggfd"]
   const handleToTop = () => {
     window.scrollTo({
       top: 0,
@@ -20,6 +21,7 @@ export default function About() {
   }, []);
   return (
     <div>
+      
       <AboutLanding />
       <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] py-20">
         <WhyUs />
@@ -30,6 +32,7 @@ export default function About() {
         <JoinTheFight/>
         <UserExperience/>
         <PartnersCarousel/>
+
       </div>
     </div>
   );

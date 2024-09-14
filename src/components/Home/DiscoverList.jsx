@@ -2,53 +2,10 @@ import React from "react";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { FaFacebook } from "react-icons/fa";
-import { FaPhoneAlt } from "react-icons/fa";
-import { IoMdHome } from "react-icons/io";
-import { GiRobber } from "react-icons/gi";
-import { FaRegEye } from "react-icons/fa";
-import { CgMoreO } from "react-icons/cg";
+
 import moreBgImg from "../../assets/images/home_category.jpeg";
 
-export default function DiscoverList() {
-  const lists = [
-    {
-      title: "E-Commerce-Fraud",
-      link: "/about",
-      icon: <MdOutlineShoppingCart />,
-    },
-    {
-      title: "F-Commerce-Fraud",
-      link: "/about",
-      icon: <FaFacebook />,
-    },
-    {
-      title: "Fraud Caller",
-      link: "/about",
-      icon: <FaPhoneAlt />,
-    },
-    {
-      title: "Fake Government Website",
-      link: "/about",
-      icon: <FaRegEye />,
-    },
-    {
-      title: "Scammer",
-      link: "/about",
-      icon: <GiRobber />,
-    },
-    {
-      title: "Shop Fraud",
-      link: "/about",
-      icon: <IoMdHome />,
-    },
-    {
-      title: "Other Issues",
-      link: "/about",
-      icon: <CgMoreO />,
-    },
-  ];
-
+export default function DiscoverList({ lists }) {
   return (
     <div className="pb-16">
       <div>
@@ -62,7 +19,7 @@ export default function DiscoverList() {
       <div className="pt-16 grid grid-cols-12 gap-8">
         {lists?.map((item) => (
           <Link
-            to={`/${item.link}`}
+            to={`/ads/${item.link}`}
             className="col-span-6 md:col-span-4 rounded-lg lg:col-span-3 h-[300px] w-full border-2 relative group"
             key={item.title}
           >
