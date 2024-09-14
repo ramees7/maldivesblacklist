@@ -10,6 +10,7 @@ import {
   selectedTypeContext,
 } from "../../Context/ContextShares";
 import { useLocation, useNavigate } from "react-router-dom";
+import Modal from "./Modal";
 
 export default function ClassifiedAds({ allData, lists }) {
   const [isGridView, setIsGridView] = useState(true);
@@ -17,14 +18,16 @@ export default function ClassifiedAds({ allData, lists }) {
   const [hoveredCardId, setHoveredCardId] = useState(null);
   const { adsChanging, setAdsChanging } = useContext(adsChangingContext);
   const location = useLocation();
-  const navigate = useNavigate(); // Hook to navigate programmatically
+  const navigate = useNavigate();
   const { selectedType, setSelectedType } = useContext(selectedTypeContext);
 
-  useEffect(() => {
-    if (window.innerWidth <= 768) {
-      setIsGridView(true);
-    }
-  }, [window.innerWidth <= 768]);
+  // Store the current page in the URL
+  const searchParams = new URLSearchParams(location.search);
+  const pageFromURL = parseInt(searchParams.get("page"), 10) || 1; // Default to page 1
+
+  // Pagination States
+  const [currentPage, setCurrentPage] = useState(pageFromURL);
+  const itemsPerPage = 12;
 
   const [locationPath, setLocationPath] = useState("");
   const [filteredData, setFilteredData] = useState([]);
@@ -60,9 +63,33 @@ export default function ClassifiedAds({ allData, lists }) {
   const resultsCount = filteredFraudData.length;
 
   const handleClose = () => {
-    navigate("/ads/all"); // Navigate to /ads/all
-    setSelectedType(""); // Optionally clear selectedType
+    navigate("/ads/all");
+    setSelectedType("");
   };
+
+  // Compute the items to display on the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredFraudData?.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredFraudData.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    navigate(`?page=${pageNumber}`); // Update the URL query string with the new page number
+  };
+
+  // On initial load, set the page based on URL query string
+  useEffect(() => {
+    const page = parseInt(searchParams.get("page"), 10);
+    if (page && page !== currentPage) {
+      setCurrentPage(page);
+    }
+  }, [location.search]);
 
   return (
     <div className="px-8 min-h-screen pb-20">
@@ -80,7 +107,9 @@ export default function ClassifiedAds({ allData, lists }) {
         {/* Other header elements */}
         <div className="text-lg font-semibold">
           <span className="text-gray-800 text-xl">{resultsCount} Results</span>
-          <span className="text-yellow-500 ml-2 text-lg">{selectedType ==="Any" ?"Classified Ads" :selectedType}</span>
+          <span className="text-yellow-500 ml-2 text-lg">
+            {selectedType === "Any" ? "Classified Ads" : selectedType}
+          </span>
         </div>
         <div className="hidden md:block">
           <div className="flex items-center space-x-3 md:my-5 lg:my-0">
@@ -113,8 +142,10 @@ export default function ClassifiedAds({ allData, lists }) {
         </div>
       </div>
       <div className="flex items-center justify-between gap-x-8 py-1 bg-[#537cd9] w-fit text-white px-4 text-md rounded-lg mb-2">
-        <h2 className=" ">{selectedType ==="Any" ?"Classified Ads" :selectedType}</h2>
-        {locationPath != "all" && (
+        <h2 className=" ">
+          {selectedType === "Any" ? "Classified Ads" : selectedType}
+        </h2>
+        {locationPath !== "all" && (
           <button
             onClick={handleClose}
             className="p-1 bg-white rounded-full text-[#537cd9]"
@@ -132,14 +163,14 @@ export default function ClassifiedAds({ allData, lists }) {
             : "space-y-6"
         }
       >
-        {filteredFraudData?.map((item) => (
+        {currentItems.map((item) => (
           <div
             key={item.id}
             className={`relative bg-white shadow-lg rounded-lg overflow-hidden ${
               isGridView ? "" : "flex flex-row items-start"
             }`}
-            onMouseEnter={() => setHoveredCardId(item.id)} // Set hover state
-            onMouseLeave={() => setHoveredCardId(null)} // Unset hover state
+            onMouseEnter={() => setHoveredCardId(item.id)}
+            onMouseLeave={() => setHoveredCardId(null)}
           >
             <div className="relative">
               <img
@@ -149,7 +180,6 @@ export default function ClassifiedAds({ allData, lists }) {
                   isGridView ? "h-[200px] w-full" : "h-52 w-52"
                 }`}
               />
-              {/* Carousel only appears on hover */}
               {hoveredCardId === item.id && (
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300">
                   <Carousel images={item.images} />
@@ -167,47 +197,62 @@ export default function ClassifiedAds({ allData, lists }) {
                 </p>
               </div>
               <div className="mt-4 flex items-center justify-between text-gray-500 text-sm border-t-2 py-3">
-                <div className="flex items-center space-x-2">
-                  <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full">
-                    <IoEyeOutline />
-                  </button>
-                  <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full">
+                <div className="flex items-center ">
+                  <Modal data={item}/>
+                  <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full mx-2">
                     <IoIosGitCompare />
                   </button>
-                  <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full">
+                  <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full ">
                     <CiHeart />
                   </button>
                 </div>
-                <span>{item.views} Views</span>
+                <div>
+                  <h3 className="text-md text-gray-500">{item.views} views</h3>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Off-canvas overlay */}
-      {isFilterOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-gray-800 bg-opacity-50 z-40 transition-opacity"
-            onClick={() => setIsFilterOpen(false)} // Close the off-canvas when overlay is clicked
-          ></div>
-
-          {/* Off-canvas content */}
-          <div className="fixed inset-y-0 left-0 w-3/4 max-w-sm bg-white z-50 shadow-lg transform transition-transform duration-300 translate-x-0 lg:hidden">
-            <div className="p-4">
-              <button
-                className="text-gray-700 text-2xl"
-                onClick={() => setIsFilterOpen(false)}
-              >
-                &times;
-              </button>
-              {/* Render FraudTypes here */}
-              <FraudTypes offcanvas={true} allData={allData} />
-            </div>
-          </div>
-        </>
-      )}
+      {/* Pagination Controls */}
+      <div className="flex justify-between mt-10">
+        <div>
+          <h1>
+            Showing {indexOfFirstItem + 1} to{" "}
+            {Math.min(indexOfLastItem, resultsCount)} of {resultsCount} results
+          </h1>
+        </div>
+        <div className="flex justify-end gap-x-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-[#d5e3ee] text-black rounded-l-lg disabled:opacity-50"
+          >
+            <FaArrowLeftLong />
+          </button>
+          {[...Array(totalPages).keys()].map((pageNumber) => (
+            <button
+              key={pageNumber + 1}
+              onClick={() => handlePageChange(pageNumber + 1)}
+              className={`px-4 py-2 ${
+                currentPage === pageNumber + 1
+                  ? "bg-yellow-500 text-black"
+                  : "bg-[#d5e3ee] hover:text-yellow-500"
+              } rounded-md`}
+            >
+              {pageNumber + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-[#d5e3ee] text-black rounded-r-lg disabled:opacity-50"
+          >
+            <FaArrowRightLong />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
