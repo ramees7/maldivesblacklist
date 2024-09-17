@@ -1,16 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { CiFilter, CiGrid2H, CiHeart } from "react-icons/ci";
-import { IoEyeOutline, IoGridOutline } from "react-icons/io5";
+import { IoGridOutline } from "react-icons/io5";
 import FraudTypes from "./FraudTypes";
 import { IoIosGitCompare } from "react-icons/io";
 import { FaArrowLeftLong, FaArrowRightLong, FaXmark } from "react-icons/fa6";
 import {
   adsChangingContext,
+  compareDataContext,
   discoverDataContext,
   selectedTypeContext,
 } from "../../Context/ContextShares";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
+import ComparisonBox from "./ComparisonBox";
 
 export default function ClassifiedAds({ allData, lists }) {
   const [isGridView, setIsGridView] = useState(true);
@@ -21,19 +23,19 @@ export default function ClassifiedAds({ allData, lists }) {
   const navigate = useNavigate();
   const { selectedType, setSelectedType } = useContext(selectedTypeContext);
 
-  // Store the current page in the URL
   const searchParams = new URLSearchParams(location.search);
-  const pageFromURL = parseInt(searchParams.get("page"), 10) || 1; // Default to page 1
+  const pageFromURL = parseInt(searchParams.get("page"), 10) || 1;
 
-  // Pagination States
   const [currentPage, setCurrentPage] = useState(pageFromURL);
   const itemsPerPage = 12;
 
   const [locationPath, setLocationPath] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [filteredFraudData, setFilteredFraudData] = useState([]);
+  // const [compareDataStored, setCompareDataStored] = useState([]);
 
   const { discoverData, setDiscoverData } = useContext(discoverDataContext);
+  const { compareData, setCompareData } = useContext(compareDataContext);
 
   useEffect(() => {
     setLocationPath(location.pathname.slice(5));
@@ -67,7 +69,6 @@ export default function ClassifiedAds({ allData, lists }) {
     setSelectedType("");
   };
 
-  // Compute the items to display on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredFraudData?.slice(
@@ -75,21 +76,64 @@ export default function ClassifiedAds({ allData, lists }) {
     indexOfLastItem
   );
 
-  // Pagination Logic
   const totalPages = Math.ceil(filteredFraudData.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    navigate(`?page=${pageNumber}`); // Update the URL query string with the new page number
+    navigate(`?page=${pageNumber}`);
   };
 
-  // On initial load, set the page based on URL query string
   useEffect(() => {
     const page = parseInt(searchParams.get("page"), 10);
     if (page && page !== currentPage) {
       setCurrentPage(page);
     }
   }, [location.search]);
+
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (canvasRef.current && !canvasRef.current.contains(event.target)) {
+        setIsFilterOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [canvasRef, setIsFilterOpen]);
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleCompareClick = (e, item) => {
+    e.preventDefault();
+
+    const isItemInCompare = compareData.some(
+      (compareItem) => compareItem.id === item.id
+    );
+
+    if (!isItemInCompare) {
+      setCompareData([...compareData, item]);
+      
+    }
+    setShowPopup(true);
+  };
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("CompareData"));
+    if (storedData && Array.isArray(storedData)) {
+      setCompareData(storedData); // Update the compareData state with localStorage data
+    }
+  }, []); // Empty dependency array ensures it runs only once on mount
+
+  // Save compareData to localStorage whenever compareData is updated
+  useEffect(() => {
+    if (compareData.length > 0) {
+      localStorage.setItem("CompareData", JSON.stringify(compareData));
+    }
+  }, [compareData]);
 
   return (
     <div className="px-8 min-h-screen pb-20">
@@ -103,8 +147,33 @@ export default function ClassifiedAds({ allData, lists }) {
             <span>More Filters</span>
           </button>
         </div>
+        {isFilterOpen && (
+          <div className="fixed inset-0 z-40">
+            <div className="fixed inset-0 bg-black opacity-25"></div>
 
-        {/* Other header elements */}
+            <div
+              ref={canvasRef}
+              className={`fixed top-0 left-0 w-2/3 md:w-1/3 h-full bg-white shadow-lg z-50 p-4 transform ${
+                isFilterOpen ? "translate-x-0" : "-translate-x-full"
+              } transition-transform duration-300`}
+            >
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-bold">Filters</h2>
+                <button onClick={() => setIsFilterOpen(false)}>
+                  <FaXmark className="text-2xl" />
+                </button>
+              </div>
+
+              <FraudTypes
+                offcanvas={true}
+                data={filteredFraudData}
+                allData={allData}
+                setOffcanvas={setIsFilterOpen}
+              />
+            </div>
+          </div>
+        )}
+
         <div className="text-lg font-semibold">
           <span className="text-gray-800 text-xl">{resultsCount} Results</span>
           <span className="text-yellow-500 ml-2 text-lg">
@@ -172,50 +241,68 @@ export default function ClassifiedAds({ allData, lists }) {
             onMouseEnter={() => setHoveredCardId(item.id)}
             onMouseLeave={() => setHoveredCardId(null)}
           >
-            <div className="relative">
-              <img
-                src={item.images[0]}
-                alt={item.title}
-                className={`object-cover ${
-                  isGridView ? "h-[200px] w-full" : "h-52 w-52"
-                }`}
-              />
-              {hoveredCardId === item.id && (
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300">
-                  <Carousel images={item.images} />
-                </div>
-              )}
-            </div>
+            <Link to={`/ads/${item.typeOfFraud}/${item.title}`} className="">
+              <div className="relative">
+                <img
+                  src={item.images[0]}
+                  alt={item.title}
+                  className={`object-cover ${
+                    isGridView ? "h-[200px] w-full" : "h-52 w-52"
+                  }`}
+                />
+                {hoveredCardId === item.id && (
+                  <div className="absolute inset-0  bg-black bg-opacity-50  flex items-center justify-center transition-opacity duration-300">
+                    <Carousel images={item.images} />
+                  </div>
+                )}
+              </div>
 
-            <div className={`p-4 ${isGridView ? "" : "flex-1"}`}>
-              <div className="min-h-[80px] h-[100px] max-h-fit">
-                <h2 className="font-semibold text-lg">{item.title}</h2>
-                <p
-                  className={`text-gray-500 ${isGridView ? "hidden" : "block"}`}
-                >
-                  {item.description}
-                </p>
-              </div>
-              <div className="mt-4 flex items-center justify-between text-gray-500 text-sm border-t-2 py-3">
-                <div className="flex items-center ">
-                  <Modal data={item}/>
-                  <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full mx-2">
-                    <IoIosGitCompare />
-                  </button>
-                  <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full ">
-                    <CiHeart />
-                  </button>
+              <div className={`p-4 ${isGridView ? "" : "flex-1"}`}>
+                <div className="min-h-[80px] h-[100px] max-h-fit">
+                  <h2 className="font-semibold text-lg">{item.title}</h2>
+                  <p
+                    className={`text-gray-500 ${
+                      isGridView ? "hidden" : "block"
+                    }`}
+                  >
+                    {item.description}
+                  </p>
                 </div>
-                <div>
-                  <h3 className="text-md text-gray-500">{item.views} views</h3>
+                <div className=" flex items-center justify-between text-gray-500 text-sm border-t-2 py-3">
+                  <div className="flex items-center ">
+                    <div onClick={(e) => e.preventDefault()}>
+                      <Modal data={item} />
+                    </div>
+                    <button
+                      className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full mx-2"
+                      onClick={(e) => handleCompareClick(e, item)}
+                    >
+                      <IoIosGitCompare />
+                    </button>
+
+                    {showPopup && <ComparisonBox />}
+
+                    <button
+                      className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full "
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <CiHeart />
+                    </button>
+                  </div>
+                  <div>
+                    <h3 className="text-md text-gray-500">
+                      {item.views} views
+                    </h3>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         ))}
       </div>
 
-      {/* Pagination Controls */}
       <div className="flex justify-between mt-10">
         <div>
           <h1>
@@ -260,11 +347,13 @@ export default function ClassifiedAds({ allData, lists }) {
 const Carousel = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleNext = () => {
+  const handleNext = (e) => {
+    e.preventDefault();
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
-  const handlePrev = () => {
+  const handlePrev = (e) => {
+    e.preventDefault();
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
@@ -275,7 +364,7 @@ const Carousel = ({ images }) => {
       <img
         src={images[currentIndex]}
         alt="Carousel"
-        className="w-full h-full object-cover  transition-opacity duration-700 ease-in-out" // Smooth transition for opacity
+        className="w-full h-full object-cover  transition-opacity duration-700 ease-in-out"
       />
       <button
         onClick={handlePrev}

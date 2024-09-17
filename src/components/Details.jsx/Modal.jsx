@@ -1,17 +1,22 @@
 import React, { useState } from "react";
+import { CiClock1, CiHeart } from "react-icons/ci";
 import { FaXmark, FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6"; // Import necessary icons
+import { IoIosGitCompare } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 export default function Modal({ data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Function to handle closing the modal
-  const onClose = () => {
+  const onClose = (e) => {
+    // e.preventDefault()
     setIsModalOpen(false);
   };
 
   // Function to open the modal
-  const handleOpenModal = () => {
+  const handleOpenModal = (e) => {
+    // e.preventDefault()
     setIsModalOpen(true);
   };
 
@@ -19,7 +24,6 @@ export default function Modal({ data }) {
 
   return (
     <>
-      {/* Eye icon button to open the modal */}
       <button
         onClick={handleOpenModal}
         className={`hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full`}
@@ -29,8 +33,8 @@ export default function Modal({ data }) {
 
       {/* Modal structure */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex w-full items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg  w-[75%] relative">
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex w-full items-center justify-center cursor-default">
+          <div className="bg-white rounded-lg shadow-lg  w-[75%] p-8 relative">
             {/* Close button */}
             <button
               onClick={onClose}
@@ -45,14 +49,42 @@ export default function Modal({ data }) {
                 {/* Carousel content */}
                 <Carousel images={data.images} />
               </div>
-              <div className="md:col-span-6 col-span-12">
-                <h2 className="text-2xl font-semibold mb-4">{data.title}</h2>
-                <p className="text-gray-600 mb-6">{data.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-500">{data.views} views</span>
-                  <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">
-                    View Full Details
-                  </button>
+              <div className="md:col-span-6 col-span-12 flex flex-col justify-between">
+                <div className="mb-5">
+                  <div className="flex justify-between md:pe-8 items-center">
+                    <h3 className="text-gray-500 text-md flex items-center gap-x-2">
+                      <CiClock1 /> {data.dateOfPosted} days ago
+                    </h3>
+                    <h3 className="text-gray-500 text-md flex items-center gap-x-2">
+                      <IoEyeOutline />
+                      {data.views} views
+                    </h3>
+                  </div>
+                  <div>
+                    <h2 className="md:text-3xl text-2xl font-semibold mb-4">
+                      {data.title}
+                    </h2>
+                    <h1 className="md:text-xl text-lg border-blue-500 py-1 px-3 rounded-lg border-2 w-fit">
+                      {data.typeOfFraud}
+                    </h1>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center mt-5">
+                  <div className=" bg-[#537cd9] font-semibold text-lg text-white rounded w-fit">
+                    <Link to={""}>
+                      <button className="py-3 px-4 flex items-center gap-x-2">
+                        View More <FaArrowRightLong />
+                      </button>
+                    </Link>
+                  </div>
+                  <div>
+                    <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full mx-2">
+                      <IoIosGitCompare />
+                    </button>
+                    <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full ">
+                      <CiHeart />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

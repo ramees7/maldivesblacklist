@@ -4,7 +4,10 @@ import { TbBulb } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 import FraudTypes from "../components/Details.jsx/FraudTypes";
 import ClassifiedAds from "../components/Details.jsx/ClassifiedAds";
-import { discoverDataContext } from "../Context/ContextShares";
+import {
+  discoverDataContext,
+  selectedTypeContext,
+} from "../Context/ContextShares";
 
 export default function FraudDetails({ lists }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +16,7 @@ export default function FraudDetails({ lists }) {
   const [filteredFraudData, setFilteredFraudData] = useState([]);
 
   const { discoverData, setDiscoverData } = useContext(discoverDataContext);
+  const { selectedType, setSelectedType } = useContext(selectedTypeContext);
 
   const location = useLocation();
   useEffect(() => {
@@ -116,7 +120,18 @@ export default function FraudDetails({ lists }) {
             </h2>
           </Link>
           <IoIosArrowForward className="text-yellow-500" />
-          <h2 className="text-gray-500">About</h2>
+          <Link to={"/ads/all"}>
+            <h2 className="text-black hover:text-yellow-500 hover:cursor-pointer">
+              Search Results
+            </h2>
+          </Link>
+
+          {selectedType !== "Any" && (
+            <>
+              <IoIosArrowForward className="text-yellow-500" />
+              <h2 className="text-gray-500">{selectedType}</h2>
+            </>
+          )}
         </div>
       </div>
       <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#d5e3ee] py-6 ">

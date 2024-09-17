@@ -16,6 +16,7 @@ import { GiRobber } from "react-icons/gi";
 import { FaRegEye } from "react-icons/fa";
 import { CgMoreO } from "react-icons/cg";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import AdsOverview from "../pages/AdsOverview";
 
 export default function LayoutRoutes() {
   const [showHeaderNav, setShowHeaderNav] = useState(true);
@@ -96,12 +97,13 @@ export default function LayoutRoutes() {
           <Route path="/login" element={<Auth />} />
           <Route path="/register" element={<Auth />} />
           <Route path="/report" element={<Report />} />
-          {
+          {/* {
             lists?.map(item=>(
               <Route path={`/ads/${item.link}`} key={item.link} element={<FraudDetails lists={lists}/>} />
             ))
-          }
-          <Route path={`/ads/all`} element={<FraudDetails lists={lists}/>} />
+          } */}
+          <Route path={`/ads/:name`} element={<FraudDetails lists={lists}/>} />
+          <Route path={`/ads/:title/:name`} element={<AdsOverview/>} />
           <Route path="/*" element={<Home />} />
         </Routes>
         <Footer />

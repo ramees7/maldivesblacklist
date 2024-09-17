@@ -3,10 +3,12 @@ import React, { createContext, useState } from "react";
 export const adsChangingContext = createContext();
 export const discoverDataContext = createContext();
 export const selectedTypeContext = createContext();
+export const compareDataContext = createContext();
 
 export default function ContextShares({ children }) {
   const [adsChanging, setAdsChanging] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [compareData, setCompareData] = useState([]);
 
   const dicoverDataAll = [
     {
@@ -272,7 +274,9 @@ export default function ContextShares({ children }) {
           <selectedTypeContext.Provider
             value={{ selectedType, setSelectedType }}
           >
-            {children}
+            <compareDataContext.Provider value={{compareData, setCompareData}}>
+              {children}
+            </compareDataContext.Provider>
           </selectedTypeContext.Provider>
         </adsChangingContext.Provider>
       </discoverDataContext.Provider>
