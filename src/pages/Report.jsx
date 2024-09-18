@@ -76,6 +76,17 @@ export default function Report() {
       setSelectedFile(file);
     }
   };
+
+  const handleToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    handleToTop();
+  }, []);
   return (
     <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] py-20">
       <h1 className="text-4xl font-semibold mb-8 text-gray-700">
@@ -240,7 +251,10 @@ export default function Report() {
         <div className="w-full mt-24">
           <h3 className="text-2xl font-semibold text-gray-700 mb-8 flex items-center">
             Insert Evidence <span className="text-red-400">*</span>
-            <span className="ml-2 text-yellow-400 text-lg" title="Insert chat screenshots, receipts, invoices and any other evidences">
+            <span
+              className="ml-2 text-yellow-400 text-lg"
+              title="Insert chat screenshots, receipts, invoices and any other evidences"
+            >
               <CiCircleInfo />
             </span>
           </h3>
@@ -274,7 +288,10 @@ export default function Report() {
 
             {/* Submit Button */}
             <div className="flex justify-end my-10">
-              <Link to={"/report"} className=" bg-[#537cd9] font-semibold text-lg text-white rounded w-fit">
+              <Link
+                to={"/report"}
+                className=" bg-[#537cd9] font-semibold text-lg text-white rounded w-fit"
+              >
                 <button className="py-3 px-6">Repost Fraud +</button>
               </Link>
             </div>

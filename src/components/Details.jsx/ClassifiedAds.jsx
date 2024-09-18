@@ -146,8 +146,8 @@ export default function ClassifiedAds({ allData, lists }) {
   }, [compareData]);
 
   const handleSelectedFraudDetails = (item) => {
-    setSelectedFraudDetail(item)
-  }
+    setSelectedFraudDetail(item);
+  };
 
   return (
     <div className="px-8 min-h-screen pb-20">

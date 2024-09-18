@@ -98,6 +98,17 @@ export default function FraudDetails({ lists }) {
     }
   }, [filteredData]);
 
+
+  const handleToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(()=>{
+    handleToTop()
+  },[])
   // useEffect(() => {
   //   if (filteredData.length > 0) {
   //     const filteredFraud = data.filter((item) => {

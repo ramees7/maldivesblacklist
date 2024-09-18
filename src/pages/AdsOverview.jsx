@@ -15,11 +15,22 @@ export default function AdsOverview() {
     selectedFraudDetailContext
   );
   const [selectedData, setSelectedData] = useState({});
+  const [isPosteduserMorePosts, setIsPosteduserMorePosts] = useState(true);
 
   useEffect(() => {
     setSelectedData(selectedFraudDetail);
   }, [selectedFraudDetail]);
 
+  const handleToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    handleToTop();
+  }, []);
   return (
     <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] pb-20">
       <div className=" flex items-center gap-x-2  border-0 py-6">
@@ -62,7 +73,9 @@ export default function AdsOverview() {
       </div>
       <AdsCarousel />
       <AdsDetails />
-      <MoreRelatedFraud/>
+      {/* here when the current ads added user other details show */}
+      {isPosteduserMorePosts && <MoreRelatedFraud isPosteduserMorePosts={isPosteduserMorePosts}/>} 
+      <MoreRelatedFraud />
     </div>
   );
 }
