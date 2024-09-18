@@ -18,7 +18,7 @@ export default function ContextShares({ children }) {
         "https://miro.medium.com/v2/resize:fit:768/1*9LjCJPuRo52sPNxkvTX_WA.jpeg",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFiQLSbtL-YNbxEzF5S62mphQ90kXpfZWfaA&s",
       ],
-      title: "Makeovers by Anmon",
+      title: "Makeovers by Anmon dsd f fbjk j jkdfnj jfdn djjk jd",
       description:
         "Makeovers by Anmon is SCAAAMM!! Dont take any services from them.",
       views: 1,
@@ -50,7 +50,7 @@ export default function ContextShares({ children }) {
     {
       id: 3,
       images: [
-        "https://callcenterstudio.com/wp-content/uploads/2023/09/Call-Center-Fraud.jpg",
+        "https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg",
         "https://via.placeholder.com/150/FF0000/FFFFFF?text=Second+Image",
         "https://via.placeholder.com/150/0000FF/808080?text=Third+Image",
       ],
@@ -68,7 +68,7 @@ export default function ContextShares({ children }) {
     {
       id: 4,
       images: [
-        "https://callcenterstudio.com/wp-content/uploads/2023/09/Call-Center-Fraud.jpg",
+        "https://t3.ftcdn.net/jpg/05/71/06/76/360_F_571067620_JS5T5TkDtu3gf8Wqm78KoJRF1vobPvo6.jpg",
         "https://via.placeholder.com/150/FF0000/FFFFFF?text=Second+Image",
         "https://via.placeholder.com/150/0000FF/808080?text=Third+Image",
       ],
@@ -86,7 +86,7 @@ export default function ContextShares({ children }) {
     {
       id: 5,
       images: [
-        "https://callcenterstudio.com/wp-content/uploads/2023/09/Call-Center-Fraud.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8SdsR9K6qNNxkExuSRl5RWtaas2EIeFLl8A&s",
         "https://via.placeholder.com/150/FF0000/FFFFFF?text=Second+Image",
         "https://via.placeholder.com/150/0000FF/808080?text=Third+Image",
       ],
@@ -104,7 +104,7 @@ export default function ContextShares({ children }) {
     {
       id: 6,
       images: [
-        "https://callcenterstudio.com/wp-content/uploads/2023/09/Call-Center-Fraud.jpg",
+        "https://static.vecteezy.com/system/resources/thumbnails/023/033/609/small_2x/wonderful-mushroom-wallpaper-fantasy-wallpaper-4k-mushroom-light-fantasy-mushroom-jungle-generative-ai-photo.jpeg",
         "https://via.placeholder.com/150/FF0000/FFFFFF?text=Second+Image",
         "https://via.placeholder.com/150/0000FF/808080?text=Third+Image",
       ],
@@ -122,7 +122,7 @@ export default function ContextShares({ children }) {
     {
       id: 7,
       images: [
-        "https://callcenterstudio.com/wp-content/uploads/2023/09/Call-Center-Fraud.jpg",
+        "https://t4.ftcdn.net/jpg/05/50/33/47/360_F_550334715_0d2cdaljV4Xd3x7yVUhRxfmLLEUyMdXr.jpg",
         "https://via.placeholder.com/150/FF0000/FFFFFF?text=Second+Image",
         "https://via.placeholder.com/150/0000FF/808080?text=Third+Image",
       ],
@@ -140,7 +140,7 @@ export default function ContextShares({ children }) {
     {
       id: 8,
       images: [
-        "https://callcenterstudio.com/wp-content/uploads/2023/09/Call-Center-Fraud.jpg",
+        "https://img.freepik.com/free-photo/majestic-mountain-peak-tranquil-winter-landscape-generated-by-ai_188544-15662.jpg?size=626&ext=jpg&ga=GA1.1.2008272138.1726531200&semt=ais_hybrid",
         "https://via.placeholder.com/150/FF0000/FFFFFF?text=Second+Image",
         "https://via.placeholder.com/150/0000FF/808080?text=Third+Image",
       ],

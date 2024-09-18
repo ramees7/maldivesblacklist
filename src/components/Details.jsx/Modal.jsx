@@ -1,14 +1,53 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CiClock1, CiHeart } from "react-icons/ci";
 import { FaXmark, FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6"; // Import necessary icons
 import { IoIosGitCompare } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { compareDataContext } from "../../Context/ContextShares";
 
-export default function Modal({ data }) {
+export default function Modal({ data, isItemInCompare }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Function to handle closing the modal
+  const { compareData, setCompareData } = useContext(compareDataContext);
+
+  // const [showPopup, setShowPopup] = useState(false);
+
+  const handleCompareClick = (e, item) => {
+    e.preventDefault();
+
+    const isItemInCompare = compareData.some(
+      (compareItem) => compareItem.id === item.id
+    );
+
+    if (isItemInCompare) {
+      // Remove item if it's already in the comparison list
+      const updatedCompareData = compareData.filter(
+        (compareItem) => compareItem.id !== item.id
+      );
+      setCompareData(updatedCompareData);
+    } else {
+      // Add item if it's not in the comparison list
+      setCompareData([...compareData, item]);
+    }
+
+    // setShowPopup(true);
+  };
+
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("CompareData"));
+    if (storedData && Array.isArray(storedData)) {
+      setCompareData(storedData);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (compareData.length > 0) {
+      localStorage.setItem("CompareData", JSON.stringify(compareData));
+    }
+  }, [compareData]);
+
   const onClose = (e) => {
     // e.preventDefault()
     setIsModalOpen(false);
@@ -78,7 +117,14 @@ export default function Modal({ data }) {
                     </Link>
                   </div>
                   <div>
-                    <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full mx-2">
+                    <button
+                      className={`p-2 border-2 rounded-full mx-2 ${
+                        isItemInCompare
+                          ? "bg-blue-500 text-white border-blue-500"
+                          : "hover:text-blue-500 hover:border-blue-500"
+                      }`}
+                      onClick={(e) => handleCompareClick(e, data)}
+                    >
                       <IoIosGitCompare />
                     </button>
                     <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full ">

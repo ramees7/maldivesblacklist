@@ -114,21 +114,27 @@ export default function ClassifiedAds({ allData, lists }) {
       (compareItem) => compareItem.id === item.id
     );
 
-    if (!isItemInCompare) {
+    if (isItemInCompare) {
+      // Remove item if it's already in the comparison list
+      const updatedCompareData = compareData.filter(
+        (compareItem) => compareItem.id !== item.id
+      );
+      setCompareData(updatedCompareData);
+    } else {
+      // Add item if it's not in the comparison list
       setCompareData([...compareData, item]);
-      
     }
+
     setShowPopup(true);
   };
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("CompareData"));
     if (storedData && Array.isArray(storedData)) {
-      setCompareData(storedData); // Update the compareData state with localStorage data
+      setCompareData(storedData);
     }
-  }, []); // Empty dependency array ensures it runs only once on mount
+  }, []);
 
-  // Save compareData to localStorage whenever compareData is updated
   useEffect(() => {
     if (compareData.length > 0) {
       localStorage.setItem("CompareData", JSON.stringify(compareData));
@@ -229,78 +235,87 @@ export default function ClassifiedAds({ allData, lists }) {
         className={
           isGridView
             ? "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-10"
-            : "space-y-6"
+            : "space-y-6  "
         }
       >
-        {currentItems.map((item) => (
-          <div
-            key={item.id}
-            className={`relative bg-white shadow-lg rounded-lg overflow-hidden ${
-              isGridView ? "" : "flex flex-row items-start"
-            }`}
-            onMouseEnter={() => setHoveredCardId(item.id)}
-            onMouseLeave={() => setHoveredCardId(null)}
-          >
-            <Link to={`/ads/${item.typeOfFraud}/${item.title}`} className="">
-              <div className="relative">
-                <img
-                  src={item.images[0]}
-                  alt={item.title}
-                  className={`object-cover ${
-                    isGridView ? "h-[200px] w-full" : "h-52 w-52"
-                  }`}
-                />
-                {hoveredCardId === item.id && (
-                  <div className="absolute inset-0  bg-black bg-opacity-50  flex items-center justify-center transition-opacity duration-300">
-                    <Carousel images={item.images} />
-                  </div>
-                )}
-              </div>
-
-              <div className={`p-4 ${isGridView ? "" : "flex-1"}`}>
-                <div className="min-h-[80px] h-[100px] max-h-fit">
-                  <h2 className="font-semibold text-lg">{item.title}</h2>
-                  <p
-                    className={`text-gray-500 ${
-                      isGridView ? "hidden" : "block"
+        {currentItems.map((item) => {
+          const isItemInCompare = compareData.some(
+            (compareItem) => compareItem.id === item.id
+          );
+          return (
+            <div
+              key={item.id}
+              className={`relative bg-white shadow-lg rounded-lg overflow-hidden ${
+                isGridView ? "" : "flex flex-row items-start"
+              }`}
+              onMouseEnter={() => setHoveredCardId(item.id)}
+              onMouseLeave={() => setHoveredCardId(null)}
+            >
+              <Link to={`/ads/${item.typeOfFraud}/${item.title}`} className={`${isGridView ?"" :"flex items-center"}`}>
+                <div className="relative">
+                  <img
+                    src={item.images[0]}
+                    alt={item.title}
+                    className={`object-cover ${
+                      isGridView ? "h-[200px] w-full" : "h-52 w-52"
                     }`}
-                  >
-                    {item.description}
-                  </p>
-                </div>
-                <div className=" flex items-center justify-between text-gray-500 text-sm border-t-2 py-3">
-                  <div className="flex items-center ">
-                    <div onClick={(e) => e.preventDefault()}>
-                      <Modal data={item} />
+                  />
+                  {hoveredCardId === item.id && (
+                    <div className="absolute inset-0  bg-black bg-opacity-50  flex items-center justify-center transition-opacity duration-300">
+                      <Carousel images={item.images} />
                     </div>
-                    <button
-                      className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full mx-2"
-                      onClick={(e) => handleCompareClick(e, item)}
-                    >
-                      <IoIosGitCompare />
-                    </button>
+                  )}
+                </div>
 
-                    {showPopup && <ComparisonBox />}
-
-                    <button
-                      className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full "
-                      onClick={(e) => {
-                        e.preventDefault();
-                      }}
+                <div className={`p-4 ${isGridView ? "" : "flex-1"}`}>
+                  <div className="min-h-[80px] h-[100px] max-h-fit">
+                    <h2 className="font-semibold text-lg">{item.title}</h2>
+                    <p
+                      className={`text-gray-500 ${
+                        isGridView ? "hidden" : "block"
+                      }`}
                     >
-                      <CiHeart />
-                    </button>
+                      {item.description}
+                    </p>
                   </div>
-                  <div>
-                    <h3 className="text-md text-gray-500">
-                      {item.views} views
-                    </h3>
+                  <div className=" flex items-center justify-between text-gray-500 text-sm border-t-2 py-3">
+                    <div className="flex items-center ">
+                      <div onClick={(e) => e.preventDefault()}>
+                        <Modal data={item} isItemInCompare={isItemInCompare}/>
+                      </div>
+
+                      <button
+                        className={`p-2 border-2 rounded-full mx-2 ${
+                          isItemInCompare
+                            ? "bg-blue-500 text-white border-blue-500"
+                            : "hover:text-blue-500 hover:border-blue-500"
+                        }`}
+                        onClick={(e) => handleCompareClick(e, item)}
+                      >
+                        <IoIosGitCompare />
+                      </button>
+                      {showPopup && <ComparisonBox />}
+
+                      <button
+                        className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full "
+                        onClick={(e) => {
+                          e.preventDefault();
+                        }}
+                      >
+                        <CiHeart />
+                      </button>
+                    </div>
+                    <div>
+                      <h3 className="text-md text-gray-500">
+                        {item.views} views
+                      </h3>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          </div>
-        ))}
+              </Link>
+            </div>
+          );
+        })}
       </div>
 
       <div className="flex justify-between mt-10">

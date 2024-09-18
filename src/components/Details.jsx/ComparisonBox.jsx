@@ -11,7 +11,7 @@ import { compareDataContext } from "../../Context/ContextShares";
 export default function ComparisonBox() {
   const [currentIndexComparison, setCurrentIndexComparison] = useState(0);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
-  const [storedCompareData, setStoredCompareData] = useState([]);
+  const [itemsToShow, setItemsToShow] = useState(3); // Number of images to show
   const { compareData, setCompareData } = useContext(compareDataContext);
 
   const toggleDetailPanel = (e) => {
@@ -19,22 +19,47 @@ export default function ComparisonBox() {
     setShowDetailPanel((prev) => !prev);
   };
 
+  // Adjust itemsToShow based on screen width
+  useEffect(() => {
+    const updateItemsToShow = () => {
+      if (window.innerWidth < 768) {
+        setItemsToShow(2); // Show 2 items on screens below 'md'
+      } else {
+        setItemsToShow(3); // Show 3 items on larger screens
+      }
+    };
+
+    // Initial check
+    updateItemsToShow();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", updateItemsToShow);
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener("resize", updateItemsToShow);
+    };
+  }, []);
+
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("CompareData"));
-    // Ensure data is an array or default to an empty array
-    setStoredCompareData(Array.isArray(data) ? data : []);
+    setCompareData(Array.isArray(data) ? data : []);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("CompareData", JSON.stringify(compareData));
   }, [compareData]);
 
   const handleRemoveComparison = (id) => {
     const updatedItems = compareData.filter((item) => item.id !== id);
     setCompareData(updatedItems);
-    if (currentIndexComparison > updatedItems.length - 3) {
-      setCurrentIndexComparison(Math.max(0, updatedItems.length - 3));
+    if (currentIndexComparison > updatedItems.length - itemsToShow) {
+      setCurrentIndexComparison(Math.max(0, updatedItems.length - itemsToShow));
     }
   };
 
   const handleNextComparison = () => {
-    if (currentIndexComparison + 3 < compareData.length) {
+    if (currentIndexComparison + itemsToShow < compareData.length) {
       setCurrentIndexComparison((prevIndex) => prevIndex + 1);
     }
   };
@@ -47,61 +72,59 @@ export default function ComparisonBox() {
 
   return (
     <div>
-      {storedCompareData.length > 0 && (
+      {compareData.length > 0 && (
         <div
-          className="fixed bottom-0 lg:left-3/4 left-1/2 z-40 transform -translate-x-1/2 bg-white w-[500px] rounded-t-lg "
+          className="fixed bottom-0 lg:left-3/4 left-1/2 z-40 transform -translate-x-1/2 bg-white md:w-[500px] w-[300px] rounded-t-lg cursor-default"
           onClick={(e) => e.preventDefault()}
         >
           <div
-            className="bg-white px-4 pt-4 cursor-pointer rounded-t-lg  "
+            className="bg-white px-4 pt-4 cursor-pointer rounded-t-lg"
             onClick={toggleDetailPanel}
           >
             <div className="bg-blue-600 flex py-2 px-4 gap-x-5 items-center justify-center text-white rounded-t-lg">
               <IoIosGitCompare className="text-xl" />
               <h1 className="text-xl">Compare</h1>
               <div className="bg-white rounded-full w-[20px] h-[20px] flex justify-center items-center">
-                <span className="text-black">{storedCompareData.length}</span>
+                <span className="text-black">{compareData.length}</span>
               </div>
             </div>
           </div>
 
-          {/* Detailed comparison panel - Toggle its visibility with smooth transition */}
           <div
-            className={` px-3 bg-white transition-all duration-700 ease-in-out ${
+            className={`px-3 bg-white transition-all duration-700 ease-in-out ${
               showDetailPanel
                 ? "max-h-screen opacity-100 pb-5"
                 : "max-h-0 opacity-0"
             } overflow-hidden`}
           >
-            {/* Comparison grid */}
-            <div className="flex justify-between items-center gap-x-3 p-4 rounded-lg">
-              {storedCompareData
-                .slice(currentIndexComparison, currentIndexComparison + 3)
+            <div className="flex justify-between  gap-x-3 p-4 rounded-lg">
+              {compareData
+                .slice(currentIndexComparison, currentIndexComparison + itemsToShow)
                 .map((item) => (
-                  <div
-                    key={item.id}
-                    className="border-dashed border-2 border-gray-300 p-1 rounded-lg w-1/3 flex items-center justify-center flex-col relative hover:border-transparent"
-                  >
-                    <div className="flex justify-center items-center">
-                      <div
-                        className="absolute top-2 right-2 bg-gray-200 rounded-full p-1 cursor-pointer"
-                        onClick={() => handleRemoveComparison(item.id)}
-                      >
-                        <IoClose className="text-black" />
+                  <div key={item.id} className="md:w-1/3 w-1/2">
+                    <div
+                      className="border-dashed border-2 border-gray-300 p-1 rounded-lg  flex items-center justify-center flex-col relative hover:border-transparent"
+                    >
+                      <div className="flex justify-center items-start">
+                        <div
+                          className="absolute top-2 right-2 bg-gray-200 rounded-full p-1 cursor-pointer"
+                          onClick={() => handleRemoveComparison(item.id)}
+                        >
+                          <IoClose className="text-black" />
+                        </div>
+                        <img
+                          src={item.images[0]}
+                          alt={`comparison-${item.id}`}
+                          className="w-full h-32 object-cover"
+                        />
                       </div>
-                      <img
-                        src={item.images[0]}
-                        alt={`comparison-${item.id}`}
-                        className="w-full h-32 object-cover"
-                      />
                     </div>
-                    <h1>{item.title}</h1>
+                    <h1 className="text-center text-black mt-2">{item.title}</h1>
                   </div>
                 ))}
 
-              {/* Placeholder for "Add new" when less than 3 items */}
-              {storedCompareData.length < 3 &&
-                Array.from({ length: 3 - storedCompareData.length }).map(
+              {compareData.length < itemsToShow &&
+                Array.from({ length: itemsToShow - compareData.length }).map(
                   (_, idx) => (
                     <div
                       key={`placeholder-${idx}`}
@@ -113,19 +136,15 @@ export default function ComparisonBox() {
                 )}
             </div>
 
-            {/* Message to encourage adding more */}
-            {storedCompareData.length < 2 && (
+            {compareData.length < 2 && (
               <div className="flex items-center mt-4 text-gray-500">
                 <div className="bg-yellow-200 text-yellow-700 p-2 rounded-full mr-2">
                   <IoInformationCircle className="text-xl" />
                 </div>
-                <p>
-                  You’re almost there, select at least one more ad to compare!
-                </p>
+                <p>You’re almost there, select at least one more ad to compare!</p>
               </div>
             )}
 
-            {/* Navigation buttons for carousel */}
             <div className="flex justify-end mt-4">
               <button
                 onClick={handlePrevComparison}
@@ -140,11 +159,9 @@ export default function ComparisonBox() {
               </button>
               <button
                 onClick={handleNextComparison}
-                disabled={
-                  currentIndexComparison + 3 >= storedCompareData.length
-                }
+                disabled={currentIndexComparison + itemsToShow >= compareData.length}
                 className={`bg-yellow-200 p-2 rounded-full shadow-lg hover:bg-yellow-300 mx-1 ${
-                  currentIndexComparison + 3 >= storedCompareData.length
+                  currentIndexComparison + itemsToShow >= compareData.length
                     ? "opacity-50 cursor-not-allowed"
                     : ""
                 }`}
