@@ -1,4 +1,11 @@
 import React, { createContext, useState } from "react";
+import { FaFacebook } from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
+import { IoMdHome } from "react-icons/io";
+import { GiRobber } from "react-icons/gi";
+import { FaRegEye } from "react-icons/fa";
+import { CgMoreO } from "react-icons/cg";
+import { MdOutlineShoppingCart } from "react-icons/md";
 
 export const adsChangingContext = createContext();
 export const discoverDataContext = createContext();
@@ -12,45 +19,6 @@ export default function ContextShares({ children }) {
   const [selectedType, setSelectedType] = useState("");
   const [selectedFraudDetail, setSelectedFraudDetail] = useState({});
   const [compareData, setCompareData] = useState([]);
-
-
-  // const lists = [
-  //   {
-  //     title: "E-Commerce-Fraud",
-  //     link: "e-commerce-fraud",
-  //     icon: <MdOutlineShoppingCart />,
-  //   },
-  //   {
-  //     title: "F-Commerce-Fraud",
-  //     link: "f-commerce-fraud",
-  //     icon: <FaFacebook />,
-  //   },
-  //   {
-  //     title: "Fraud Caller",
-  //     link: "fraud-caller",
-  //     icon: <FaPhoneAlt />,
-  //   },
-  //   {
-  //     title: "Fake Government Website",
-  //     link: "fake-govt-website",
-  //     icon: <FaRegEye />,
-  //   },
-  //   {
-  //     title: "Scammer",
-  //     link: "scammer",
-  //     icon: <GiRobber />,
-  //   },
-  //   {
-  //     title: "Shop Fraud",
-  //     link: "shop-fraud",
-  //     icon: <IoMdHome />,
-  //   },
-  //   {
-  //     title: "Other Issues",
-  //     link: "other-issues",
-  //     icon: <CgMoreO />,
-  //   },
-  // ];
 
   const dicoverDataAll = [
     {
@@ -67,8 +35,8 @@ export default function ContextShares({ children }) {
       dateOfPosted: "10",
       typeOfFraud: "Scammer",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
-      userCurrentStatus: "",
+      reportedUser: "ramees",
+      userCurrentStatus: 10,
       joinedDate: "",
     },
     {
@@ -85,7 +53,7 @@ export default function ContextShares({ children }) {
       dateOfPosted: "10",
       typeOfFraud: "Shop Fraud",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "ramees",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -103,7 +71,7 @@ export default function ContextShares({ children }) {
       dateOfPosted: "10",
       typeOfFraud: "Scammer",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "jithin",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -119,9 +87,9 @@ export default function ContextShares({ children }) {
         "IMF Code is required for this transaction to be completed successfully.",
       views: 20,
       dateOfPosted: "10",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "Fake Government Website",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "gopika",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -137,9 +105,9 @@ export default function ContextShares({ children }) {
         "IMF Code is required for this transaction to be completed successfully.",
       views: 20,
       dateOfPosted: "10",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "Fake Government Website",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "rashid",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -157,7 +125,7 @@ export default function ContextShares({ children }) {
       dateOfPosted: "10",
       typeOfFraud: "Scammer",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "gopika",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -175,7 +143,7 @@ export default function ContextShares({ children }) {
       dateOfPosted: "10",
       typeOfFraud: "Scammer",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "sidharth",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -193,7 +161,7 @@ export default function ContextShares({ children }) {
       dateOfPosted: "10",
       typeOfFraud: "Scammer",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "ramees",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -211,7 +179,7 @@ export default function ContextShares({ children }) {
       dateOfPosted: "10",
       typeOfFraud: "Scammer",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "gopika",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -227,9 +195,9 @@ export default function ContextShares({ children }) {
         "IMF Code is required for this transaction to be completed successfully.",
       views: 20,
       dateOfPosted: "10",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "Fake Government Website",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "ramees",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -245,9 +213,9 @@ export default function ContextShares({ children }) {
         "IMF Code is required for this transaction to be completed successfully.",
       views: 20,
       dateOfPosted: "10",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "Fraud Caller",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "rashid",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -263,9 +231,9 @@ export default function ContextShares({ children }) {
         "IMF Code is required for this transaction to be completed successfully.",
       views: 20,
       dateOfPosted: "10",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "Fraud Caller",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "jithin",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -281,9 +249,9 @@ export default function ContextShares({ children }) {
         "IMF Code is required for this transaction to be completed successfully.",
       views: 20,
       dateOfPosted: "10",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "E-Commerce-Fraud",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "sidharth",
       userCurrentStatus: "",
       joinedDate: "",
     },
@@ -299,14 +267,58 @@ export default function ContextShares({ children }) {
         "IMF Code is required for this transaction to be completed successfully.",
       views: 20,
       dateOfPosted: "10",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "E-Commerce-Fraud",
       detailedDescription: "acjdj,s dsjkc nsdjcnsdj sdj jndj ",
-      reportedUser: "name",
+      reportedUser: "jithin",
       userCurrentStatus: "",
       joinedDate: "",
     },
   ];
-  const [fraudLists, setFraudLists] = useState([]);
+
+  const lists = [
+    {
+      title: "E-Commerce-Fraud",
+      link: "e-commerce-fraud",
+      icon: <MdOutlineShoppingCart />,
+    },
+    {
+      title: "F-Commerce-Fraud",
+      link: "f-commerce-fraud",
+      icon: <FaFacebook />,
+    },
+    {
+      title: "Fraud Caller",
+      link: "fraud-caller",
+      icon: <FaPhoneAlt />,
+    },
+    {
+      title: "Fake Government Website",
+      link: "fake-govt-website",
+      icon: <FaRegEye />,
+    },
+    {
+      title: "Scammer",
+      link: "scammer",
+      icon: <GiRobber />,
+    },
+    {
+      title: "Shop Fraud",
+      link: "shop-fraud",
+      icon: <IoMdHome />,
+    },
+    {
+      title: "Other Issues",
+      link: "other-issues",
+      icon: <CgMoreO />,
+    },
+  ];
+
+  const updatedLists = lists.map((listItem) => ({
+    ...listItem,
+    count: dicoverDataAll.filter((item) => item.typeOfFraud === listItem.title)
+      .length,
+  }));
+  const [fraudLists, setFraudLists] = useState(updatedLists);
   const [discoverData, setDiscoverData] = useState(dicoverDataAll);
 
   return (
@@ -322,11 +334,11 @@ export default function ContextShares({ children }) {
               <selectedFraudDetailContext.Provider
                 value={{ selectedFraudDetail, setSelectedFraudDetail }}
               >
-              <fraudListsContext.Provider
-                value={{ fraudLists, setFraudLists }}
-              >
-                {children}
-              </fraudListsContext.Provider>
+                <fraudListsContext.Provider
+                  value={{ fraudLists, setFraudLists }}
+                >
+                  {children}
+                </fraudListsContext.Provider>
               </selectedFraudDetailContext.Provider>
             </compareDataContext.Provider>
           </selectedTypeContext.Provider>

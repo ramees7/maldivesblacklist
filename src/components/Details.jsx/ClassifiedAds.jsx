@@ -8,6 +8,7 @@ import {
   adsChangingContext,
   compareDataContext,
   discoverDataContext,
+  fraudListsContext,
   selectedFraudDetailContext,
   selectedTypeContext,
 } from "../../Context/ContextShares";
@@ -15,7 +16,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import ComparisonBox from "./ComparisonBox";
 
-export default function ClassifiedAds({ allData, lists }) {
+export default function ClassifiedAds({ allData }) {
   const [isGridView, setIsGridView] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [hoveredCardId, setHoveredCardId] = useState(null);
@@ -23,6 +24,7 @@ export default function ClassifiedAds({ allData, lists }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { selectedType, setSelectedType } = useContext(selectedTypeContext);
+  const { fraudLists, setFraudLists } = useContext(fraudListsContext);
 
   const searchParams = new URLSearchParams(location.search);
   const pageFromURL = parseInt(searchParams.get("page"), 10) || 1;
@@ -34,22 +36,21 @@ export default function ClassifiedAds({ allData, lists }) {
   const [filteredData, setFilteredData] = useState([]);
   const [filteredFraudData, setFilteredFraudData] = useState([]);
   // const [compareDataStored, setCompareDataStored] = useState([]);
-
   const { discoverData, setDiscoverData } = useContext(discoverDataContext);
   const { compareData, setCompareData } = useContext(compareDataContext);
-  const { selectedFraudDetail, setSelectedFraudDetail } = useContext(
-    selectedFraudDetailContext
-  );
+  // const { selectedFraudDetail, setSelectedFraudDetail } = useContext(
+  //   selectedFraudDetailContext
+  // );
 
   useEffect(() => {
     setLocationPath(location.pathname.slice(5));
   }, [adsChanging]);
 
   useEffect(() => {
-    if (lists) {
-      setFilteredData(lists?.filter((item) => item.link === locationPath));
+    if (fraudLists) {
+      setFilteredData(fraudLists?.filter((item) => item.link === locationPath));
     }
-  }, [lists, adsChanging]);
+  }, [fraudLists, adsChanging]);
 
   useEffect(() => {
     if (adsChanging) {
@@ -146,7 +147,8 @@ export default function ClassifiedAds({ allData, lists }) {
   }, [compareData]);
 
   const handleSelectedFraudDetails = (item) => {
-    setSelectedFraudDetail(item);
+    // setSelectedFraudDetail(item);
+    navigate(`/ads/${item.typeOfFraud}/${item.title}`, { state: { selectedFraudDetail: item } });
   };
 
   return (
@@ -259,9 +261,8 @@ export default function ClassifiedAds({ allData, lists }) {
               onMouseEnter={() => setHoveredCardId(item.id)}
               onMouseLeave={() => setHoveredCardId(null)}
             >
-              <Link
-                to={`/ads/${item.typeOfFraud}/${item.title}`}
-                className={`${isGridView ? "" : "flex items-center"}`}
+              <div
+                className={`${isGridView ? "" : "flex items-center"} cursor-pointer`}
                 onClick={() => handleSelectedFraudDetails(item)}
               >
                 <div className="relative">
@@ -324,7 +325,7 @@ export default function ClassifiedAds({ allData, lists }) {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             </div>
           );
         })}

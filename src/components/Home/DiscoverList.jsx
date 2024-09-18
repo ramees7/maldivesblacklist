@@ -1,11 +1,13 @@
-import React from "react";
-import { MdOutlineShoppingCart } from "react-icons/md";
+import React, { useContext } from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 import moreBgImg from "../../assets/images/home_category.jpeg";
+import { fraudListsContext } from "../../Context/ContextShares";
 
-export default function DiscoverList({ lists }) {
+export default function DiscoverList() {
+  const { fraudLists, setFraudLists } = useContext(fraudListsContext);
+
   return (
     <div className="pb-16">
       <div>
@@ -17,7 +19,7 @@ export default function DiscoverList({ lists }) {
         </h1>
       </div>
       <div className="pt-16 grid grid-cols-12 gap-8">
-        {lists?.map((item) => (
+        {fraudLists?.map((item) => (
           <Link
             to={`/ads/${item.link}`}
             className="col-span-6 md:col-span-4 rounded-lg lg:col-span-3 h-[300px] w-full border-2 relative group"

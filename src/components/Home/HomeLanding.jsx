@@ -1,43 +1,20 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { TbBulb } from "react-icons/tb";
 import { FaSearch } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaRegDotCircle } from "react-icons/fa";
+import { fraudListsContext } from "../../Context/ContextShares";
 
 export default function HomeLanding() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("Fraud Types");
-  const options = [
-    {
-      title: "E-Commerce-Fraud",
-      count: "10",
-    },
-    {
-      title: "F-Commerce-Fraud",
-      count: "10",
-    },
-    {
-      title: "Fraud Caller",
-      count: "10",
-    },
-    {
-      title: "Other Issues",
-      count: "10",
-    },
-    {
-      title: "Scammer",
-      count: "10",
-    },
-    {
-      title: "Shop Fraud",
-      count: "10",
-    },
-  ];
+  const { fraudLists, setFraudLists } = useContext(fraudListsContext);
+
   const dropdownRef = useRef(null);
 
   // Filter options based on the search term
-  const filteredOptions = options.filter((option) =>
+  const filteredOptions = fraudLists.filter((option) =>
     option.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -117,16 +94,16 @@ export default function HomeLanding() {
                     <ul className="overflow-y-auto">
                       {filteredOptions.map((option, index) => (
                         <div
-                          className="flex justify-between items-center my-2 hover:text-green-500"
+                          className="flex justify-between items-center cursor-pointer my-2 hover:text-green-500"
                           key={index}
                         >
                           <li
-                            className="px-4 py-2 cursor-pointer font-semibold text-start"
+                            className="px-4 py-2   text-start"
                             onClick={() => handleOptionClick(option.title)}
                           >
                             {option.title}
                           </li>
-                          <h4 className="p-1 rounded-full bg-[#537cd9] font-semibold text-white">
+                          <h4 className="w-[25px] h-[25px] rounded-full bg-[#537cd9] font-semibold text-white">
                             {option.count}
                           </h4>
                         </div>

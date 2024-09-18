@@ -1,48 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { FaPlus, FaRegFile } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import "react-quill/dist/quill.snow.css"; 
 import { Link } from "react-router-dom";
+import { fraudListsContext } from "../Context/ContextShares";
 
 export default function Report() {
   const [description, setDescription] = useState("");
-
+  const { fraudLists, setFraudLists } = useContext(fraudListsContext);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("Fraud Types");
-  const options = [
-    {
-      title: "E-Commerce-Fraud",
-      count: "10",
-    },
-    {
-      title: "F-Commerce-Fraud",
-      count: "10",
-    },
-    {
-      title: "Fraud Caller",
-      count: "10",
-    },
-    {
-      title: "Other Issues",
-      count: "10",
-    },
-    {
-      title: "Scammer",
-      count: "10",
-    },
-    {
-      title: "Shop Fraud",
-      count: "10",
-    },
-  ];
+
   const dropdownRef = useRef(null);
 
   // Filter options based on the search term
-  const filteredOptions = options.filter((option) =>
+  const filteredOptions = fraudLists.filter((option) =>
     option.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -123,15 +99,6 @@ export default function Report() {
             />
           </div>
 
-          {/* Fraud Types */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Fraud Types <span className="text-red-500">*</span>
-            </label>
-            <select className="mt-3 block w-full p-4 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-              <option>Fraud Types</option>
-            </select>
-          </div> */}
           <div className="" ref={dropdownRef}>
             <label className="block text-sm font-medium text-gray-700">
               Fraud Types <span className="text-red-500">*</span>

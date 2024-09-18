@@ -5,7 +5,7 @@ import HowWorks from "../components/Home/HowWorks";
 import PartnersCarousel from "../components/Home/PartnersCarousel";
 import UserExperience from "../components/Home/UserExperience";
 
-export default function Home({lists}) {
+export default function Home() {
   const handleToTop = () => {
     window.scrollTo({
       top: 0,
@@ -20,7 +20,7 @@ export default function Home({lists}) {
     <div>
       <HomeLanding />
       <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] py-20">
-        <DiscoverList lists={lists}/>
+        <DiscoverList />
         <HowWorks/>
         <UserExperience/>
         <PartnersCarousel/>
