@@ -1,10 +1,24 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { selectedTypeContext } from "../Context/ContextShares";
+import {
+  selectedFraudDetailContext,
+  selectedTypeContext,
+} from "../Context/ContextShares";
+import AdsCarousel from "../components/AdsOverview/AdsCarousel";
+import AdsDetails from "../components/AdsOverview/AdsDetails";
+import MoreRelatedFraud from "../components/MoreRelatedFraud/MoreRelatedFraud";
 
 export default function AdsOverview() {
   const { selectedType, setSelectedType } = useContext(selectedTypeContext);
+  const { selectedFraudDetail, setSelectedFraudDetail } = useContext(
+    selectedFraudDetailContext
+  );
+  const [selectedData, setSelectedData] = useState({});
+
+  useEffect(() => {
+    setSelectedData(selectedFraudDetail);
+  }, [selectedFraudDetail]);
 
   return (
     <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] pb-20">
@@ -20,7 +34,7 @@ export default function AdsOverview() {
             Search Results
           </h2>
         </Link>
-        {selectedType !== "Any" && (
+        {selectedType !== "Any" ? (
           <>
             <IoIosArrowForward className="text-yellow-500" />
             <Link to={"/ads/all"}>
@@ -29,9 +43,26 @@ export default function AdsOverview() {
               </h2>
             </Link>
           </>
+        ) : (
+          <>
+            <IoIosArrowForward className="text-yellow-500" />
+            <Link to={`/ads/all`}>
+              <h2 className="text-black hover:text-yellow-500 hover:cursor-pointer">
+                {selectedData.typeOfFraud}
+              </h2>
+            </Link>
+          </>
         )}
-        {/* use context to find the type */}
+        {/* <>
+          <IoIosArrowForward className="text-yellow-500" />
+          <h2 className="text-gray-500 hover:text-yellow-500 hover:cursor-pointer">
+            {selectedData.title}
+          </h2>
+        </> */}
       </div>
+      <AdsCarousel />
+      <AdsDetails />
+      <MoreRelatedFraud/>
     </div>
   );
 }

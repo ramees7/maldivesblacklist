@@ -8,6 +8,7 @@ import {
   adsChangingContext,
   compareDataContext,
   discoverDataContext,
+  selectedFraudDetailContext,
   selectedTypeContext,
 } from "../../Context/ContextShares";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -36,6 +37,9 @@ export default function ClassifiedAds({ allData, lists }) {
 
   const { discoverData, setDiscoverData } = useContext(discoverDataContext);
   const { compareData, setCompareData } = useContext(compareDataContext);
+  const { selectedFraudDetail, setSelectedFraudDetail } = useContext(
+    selectedFraudDetailContext
+  );
 
   useEffect(() => {
     setLocationPath(location.pathname.slice(5));
@@ -140,6 +144,10 @@ export default function ClassifiedAds({ allData, lists }) {
       localStorage.setItem("CompareData", JSON.stringify(compareData));
     }
   }, [compareData]);
+
+  const handleSelectedFraudDetails = (item) => {
+    setSelectedFraudDetail(item)
+  }
 
   return (
     <div className="px-8 min-h-screen pb-20">
@@ -251,7 +259,11 @@ export default function ClassifiedAds({ allData, lists }) {
               onMouseEnter={() => setHoveredCardId(item.id)}
               onMouseLeave={() => setHoveredCardId(null)}
             >
-              <Link to={`/ads/${item.typeOfFraud}/${item.title}`} className={`${isGridView ?"" :"flex items-center"}`}>
+              <Link
+                to={`/ads/${item.typeOfFraud}/${item.title}`}
+                className={`${isGridView ? "" : "flex items-center"}`}
+                onClick={() => handleSelectedFraudDetails(item)}
+              >
                 <div className="relative">
                   <img
                     src={item.images[0]}
@@ -281,14 +293,14 @@ export default function ClassifiedAds({ allData, lists }) {
                   <div className=" flex items-center justify-between text-gray-500 text-sm border-t-2 py-3">
                     <div className="flex items-center ">
                       <div onClick={(e) => e.preventDefault()}>
-                        <Modal data={item} isItemInCompare={isItemInCompare}/>
+                        <Modal data={item} isItemInCompare={isItemInCompare} />
                       </div>
 
                       <button
                         className={`p-2 border-2 rounded-full mx-2 ${
                           isItemInCompare
                             ? "bg-blue-500 text-white border-blue-500"
-                            : "hover:text-blue-500 hover:border-blue-500"
+                            : "hover:text-[#537cd9] hover:border-[#537cd9]"
                         }`}
                         onClick={(e) => handleCompareClick(e, item)}
                       >
@@ -297,7 +309,7 @@ export default function ClassifiedAds({ allData, lists }) {
                       {showPopup && <ComparisonBox />}
 
                       <button
-                        className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full "
+                        className="hover:text-[#537cd9] hover:border-[#537cd9] p-2 border-2 rounded-full "
                         onClick={(e) => {
                           e.preventDefault();
                         }}

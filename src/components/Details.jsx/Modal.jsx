@@ -65,7 +65,7 @@ export default function Modal({ data, isItemInCompare }) {
     <>
       <button
         onClick={handleOpenModal}
-        className={`hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full`}
+        className={`hover:text-[#537cd9] hover:border-[#537cd9] p-2 border-2 rounded-full`}
       >
         <IoEyeOutline />
       </button>
@@ -121,13 +121,13 @@ export default function Modal({ data, isItemInCompare }) {
                       className={`p-2 border-2 rounded-full mx-2 ${
                         isItemInCompare
                           ? "bg-blue-500 text-white border-blue-500"
-                          : "hover:text-blue-500 hover:border-blue-500"
+                          : "hover:text-[#537cd9] hover:border-[#537cd9]"
                       }`}
                       onClick={(e) => handleCompareClick(e, data)}
                     >
                       <IoIosGitCompare />
                     </button>
-                    <button className="hover:text-blue-500 hover:border-blue-500 p-2 border-2 rounded-full ">
+                    <button className="hover:text-[#537cd9] hover:border-[#537cd9] p-2 border-2 rounded-full ">
                       <CiHeart />
                     </button>
                   </div>

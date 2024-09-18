@@ -3,12 +3,54 @@ import React, { createContext, useState } from "react";
 export const adsChangingContext = createContext();
 export const discoverDataContext = createContext();
 export const selectedTypeContext = createContext();
+export const selectedFraudDetailContext = createContext();
 export const compareDataContext = createContext();
+export const fraudListsContext = createContext();
 
 export default function ContextShares({ children }) {
   const [adsChanging, setAdsChanging] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [selectedFraudDetail, setSelectedFraudDetail] = useState({});
   const [compareData, setCompareData] = useState([]);
+
+
+  // const lists = [
+  //   {
+  //     title: "E-Commerce-Fraud",
+  //     link: "e-commerce-fraud",
+  //     icon: <MdOutlineShoppingCart />,
+  //   },
+  //   {
+  //     title: "F-Commerce-Fraud",
+  //     link: "f-commerce-fraud",
+  //     icon: <FaFacebook />,
+  //   },
+  //   {
+  //     title: "Fraud Caller",
+  //     link: "fraud-caller",
+  //     icon: <FaPhoneAlt />,
+  //   },
+  //   {
+  //     title: "Fake Government Website",
+  //     link: "fake-govt-website",
+  //     icon: <FaRegEye />,
+  //   },
+  //   {
+  //     title: "Scammer",
+  //     link: "scammer",
+  //     icon: <GiRobber />,
+  //   },
+  //   {
+  //     title: "Shop Fraud",
+  //     link: "shop-fraud",
+  //     icon: <IoMdHome />,
+  //   },
+  //   {
+  //     title: "Other Issues",
+  //     link: "other-issues",
+  //     icon: <CgMoreO />,
+  //   },
+  // ];
 
   const dicoverDataAll = [
     {
@@ -264,7 +306,7 @@ export default function ContextShares({ children }) {
       joinedDate: "",
     },
   ];
-
+  const [fraudLists, setFraudLists] = useState([]);
   const [discoverData, setDiscoverData] = useState(dicoverDataAll);
 
   return (
@@ -274,8 +316,18 @@ export default function ContextShares({ children }) {
           <selectedTypeContext.Provider
             value={{ selectedType, setSelectedType }}
           >
-            <compareDataContext.Provider value={{compareData, setCompareData}}>
-              {children}
+            <compareDataContext.Provider
+              value={{ compareData, setCompareData }}
+            >
+              <selectedFraudDetailContext.Provider
+                value={{ selectedFraudDetail, setSelectedFraudDetail }}
+              >
+              <fraudListsContext.Provider
+                value={{ fraudLists, setFraudLists }}
+              >
+                {children}
+              </fraudListsContext.Provider>
+              </selectedFraudDetailContext.Provider>
             </compareDataContext.Provider>
           </selectedTypeContext.Provider>
         </adsChangingContext.Provider>

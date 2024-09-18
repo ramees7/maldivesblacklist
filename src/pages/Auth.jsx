@@ -72,7 +72,7 @@ export default function Auth() {
             <div className="px-5 py-3 mb-5 bg-white rounded">
               <button
                 onClick={signInWithGoogle}
-                className="btn flex gap-x-5 items-center"
+                className="btn flex gap-x-5 items-center w-full"
               >
                 <img src={googleIcon} alt="google icon" className="w-[30px]" />{" "}
                 <span className="text-lg">Sign in with Google</span>
