@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import { discoverDataContext } from "../../Context/ContextShares";
 
 export default function AdsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const location = useLocation();
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
+  const { discoverData, setDiscoverData } = useContext(discoverDataContext);
+
+  const fullPath = decodeURIComponent(location.pathname.split("/")[3]);
 
   useEffect(() => {
-    // Check if the selected fraud detail was passed via navigate state
-    if (location.state && location.state.selectedFraudDetail) {
-      setData(location.state.selectedFraudDetail);
+    if (discoverData && fullPath) {
+      const dataArray = discoverData?.filter((item) => item.title == fullPath);
+      setData(dataArray[0]);
     }
-  }, [location.state]);
+  }, [location]);
 
   const handlePrev = () => {
     if (data?.images?.length) {

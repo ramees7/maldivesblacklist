@@ -146,13 +146,8 @@ export default function ClassifiedAds({ allData }) {
     }
   }, [compareData]);
 
-  const handleSelectedFraudDetails = (item) => {
-    // setSelectedFraudDetail(item);
-    navigate(`/ads/${item.typeOfFraud}/${item.title}`, { state: { selectedFraudDetail: item } });
-  };
-
   return (
-    <div className="px-8 min-h-screen pb-20">
+    <div className="md:ps-8 min-h-screen pb-20">
       <div className="flex items-center justify-between mb-6 flex-col lg:flex-row">
         <div className="lg:hidden block w-full">
           <button
@@ -261,9 +256,11 @@ export default function ClassifiedAds({ allData }) {
               onMouseEnter={() => setHoveredCardId(item.id)}
               onMouseLeave={() => setHoveredCardId(null)}
             >
-              <div
-                className={`${isGridView ? "" : "flex items-center"} cursor-pointer`}
-                onClick={() => handleSelectedFraudDetails(item)}
+              <Link
+                to={`/ads/${item.typeOfFraud}/${item.title}/`}
+                className={`${
+                  isGridView ? "" : "flex items-center"
+                } cursor-pointer`}
               >
                 <div className="relative">
                   <img
@@ -325,7 +322,7 @@ export default function ClassifiedAds({ allData }) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           );
         })}

@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { selectedFraudDetailContext } from "../../Context/ContextShares";
+import {
+  discoverDataContext,
+  selectedFraudDetailContext,
+} from "../../Context/ContextShares";
 import { IoEyeOutline, IoPrintOutline } from "react-icons/io5";
 import { CiClock1, CiHeart } from "react-icons/ci";
 import { GoAlertFill } from "react-icons/go";
@@ -11,14 +14,17 @@ import { PiWarningDiamond } from "react-icons/pi";
 
 export default function AdsDetails() {
   const location = useLocation();
-  const [data, setData] = useState({});
-  
+  const [data, setData] = useState([]);
+  const { discoverData, setDiscoverData } = useContext(discoverDataContext);
+
+  const fullPath = decodeURIComponent(location.pathname.split("/")[3]);
+
   useEffect(() => {
-    // Check if the selected fraud detail was passed via navigate state
-    if (location.state && location.state.selectedFraudDetail) {
-      setData(location.state.selectedFraudDetail);
+    if (discoverData && fullPath) {
+      const dataArray=discoverData?.filter((item) => item.title == fullPath)
+      setData(dataArray[0])
     }
-  }, [location.state]);
+  }, [location]);
 
   return (
     <div>
@@ -27,7 +33,8 @@ export default function AdsDetails() {
           <div className="">
             <div className="flex justify-between md:pe-8 items-center pb-8">
               <h3 className="text-gray-500 text-md flex items-center gap-x-2">
-                <CiClock1 />{data?.dateOfPosted} days ago
+                <CiClock1 />
+                {data?.dateOfPosted} days ago
               </h3>
               <h3 className="text-gray-500 text-md flex items-center gap-x-2">
                 <IoEyeOutline />
@@ -69,7 +76,9 @@ export default function AdsDetails() {
                   <h1 className="text-xl font-semibold mb-2">
                     {data?.reportedUser}
                   </h1>
-                  <h3 className="mb-2">Member since: {data?.userCurrentStatus}</h3>
+                  <h3 className="mb-2">
+                    Member since: {data?.userCurrentStatus}
+                  </h3>
                   <Link
                     to={"/"}
                     className="underline text-blue-500 font-semibold"
