@@ -47,7 +47,7 @@ export default function LayoutRoutes() {
           <Navbar />
         </div>
 
-        <ErrorBoundary>
+        {/* <ErrorBoundary> */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about/" element={<About />} />
@@ -56,13 +56,13 @@ export default function LayoutRoutes() {
             <Route path="/login/" element={<Auth />} />
             <Route path="/register/" element={<Auth />} />
             <Route path="/report/" element={<Report />} />
-            <Route path={`/ads/:name/`} element={<FraudDetails />} />
+            <Route path={`/ads/:title/`} element={<FraudDetails />} />
             <Route path={`/ads/:title/:name/`} element={<AdsOverview />} />
             <Route path={`/user/:name/`} element={<PostedUser />} />
             <Route path="/*" element={<Navigate to="/" replace />} />
             {/* <Route path="/*" element={<Navigate to="/" replace />} />   add a new page and content is page npt found 404  */}
           </Routes>
-        </ErrorBoundary>
+        {/* </ErrorBoundary> */}
         <Footer />
       </BrowserRouter>
     </div>

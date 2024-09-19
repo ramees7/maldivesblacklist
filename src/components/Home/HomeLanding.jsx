@@ -3,7 +3,7 @@ import { TbBulb } from "react-icons/tb";
 import { FaSearch } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaRegDotCircle } from "react-icons/fa";
-import { fraudListsContext } from "../../Context/ContextShares";
+import { discoverDataContext, fraudListsContext } from "../../Context/ContextShares";
 import { Link } from "react-router-dom";
 
 export default function HomeLanding() {
@@ -11,6 +11,7 @@ export default function HomeLanding() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("Fraud Types");
   const { fraudLists, setFraudLists } = useContext(fraudListsContext);
+  const { discoverData, setDiscoverData } = useContext(discoverDataContext);
 
   const dropdownRef = useRef(null);
 

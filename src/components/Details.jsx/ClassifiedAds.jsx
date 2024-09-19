@@ -9,7 +9,6 @@ import {
   compareDataContext,
   discoverDataContext,
   fraudListsContext,
-  selectedFraudDetailContext,
   selectedTypeContext,
 } from "../../Context/ContextShares";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ export default function ClassifiedAds({ allData }) {
   const navigate = useNavigate();
   const { selectedType, setSelectedType } = useContext(selectedTypeContext);
   const { fraudLists, setFraudLists } = useContext(fraudListsContext);
-
+  const [sortOption, setSortOption] = useState("most-relevant");
   const searchParams = new URLSearchParams(location.search);
   const pageFromURL = parseInt(searchParams.get("page"), 10) || 1;
 
@@ -51,6 +50,21 @@ export default function ClassifiedAds({ allData }) {
       setFilteredData(fraudLists?.filter((item) => item.link === locationPath));
     }
   }, [fraudLists, adsChanging]);
+
+  useEffect(() => {
+    let sortedData = [...filteredFraudData];
+
+    if (sortOption === "latest") {
+      sortedData.sort(
+        (a, b) => new Date(b.dateOfPosted) - new Date(a.dateOfPosted)
+      );
+    } else if (sortOption === "oldest") {
+      sortedData.sort(
+        (a, b) => new Date(a.dateOfPosted) - new Date(b.dateOfPosted)
+      );
+    }
+    setFilteredFraudData(sortedData);
+  }, [filteredFraudData, sortOption]);
 
   useEffect(() => {
     if (adsChanging) {
@@ -194,11 +208,16 @@ export default function ClassifiedAds({ allData }) {
         <div className="hidden md:block">
           <div className="flex items-center space-x-3 md:my-5 lg:my-0">
             <h1>Sort by:</h1>
-            <select className="rounded px-2 h-[50px] outline-none">
-              <option value="most-relevant" className="rounded-none">
+            <select
+              className="rounded px-2 h-[50px] outline-none"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="most-relevant" disabled className="rounded-none">
                 Most Relevant
               </option>
               <option value="latest">Latest</option>
+              <option value="oldest">Oldest</option>
             </select>
             <div className="flex space-x-2">
               <button
