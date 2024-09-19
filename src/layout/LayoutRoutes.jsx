@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Home from "../pages/Home";
 import Footer from "../components/Footer";
@@ -11,6 +11,8 @@ import Report from "../pages/Report";
 import FraudDetails from "../pages/FraudDetails";
 
 import AdsOverview from "../pages/AdsOverview";
+import PostedUser from "../pages/PostedUser";
+import ErrorBoundary from "./ErrorBoundary";
 
 export default function LayoutRoutes() {
   const [showHeaderNav, setShowHeaderNav] = useState(true);
@@ -45,23 +47,22 @@ export default function LayoutRoutes() {
           <Navbar />
         </div>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/login" element={<Auth />} />
-          <Route path="/register" element={<Auth />} />
-          <Route path="/report" element={<Report />} />
-          {/* {
-            lists?.map(item=>(
-              <Route path={`/ads/${item.link}`} key={item.link} element={<FraudDetails lists={lists}/>} />
-            ))
-          } */}
-          <Route path={`/ads/:name`} element={<FraudDetails />} />
-          <Route path={`/ads/:title/:name`} element={<AdsOverview />} />
-          <Route path="/*" element={<Home />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about/" element={<About />} />
+            <Route path="/contact/" element={<Contact />} />
+            <Route path="/faq/" element={<FAQ />} />
+            <Route path="/login/" element={<Auth />} />
+            <Route path="/register/" element={<Auth />} />
+            <Route path="/report/" element={<Report />} />
+            <Route path={`/ads/:name/`} element={<FraudDetails />} />
+            <Route path={`/ads/:title/:name/`} element={<AdsOverview />} />
+            <Route path={`/user/:name/`} element={<PostedUser />} />
+            <Route path="/*" element={<Navigate to="/" replace />} />
+            {/* <Route path="/*" element={<Navigate to="/" replace />} />   add a new page and content is page npt found 404  */}
+          </Routes>
+        </ErrorBoundary>
         <Footer />
       </BrowserRouter>
     </div>

@@ -36,7 +36,7 @@ export default function AdsCarousel() {
   };
 
   return (
-    <div className="relative w-full overflow-hidden py-8">
+    <div className="relative w-full overflow-hidden pb-8">
       {data?.images?.length > 0 && (
         <>
           <div

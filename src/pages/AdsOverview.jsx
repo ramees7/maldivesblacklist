@@ -3,7 +3,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import {
   discoverDataContext,
-  selectedFraudDetailContext,
+  fraudListsContext,
   selectedTypeContext,
 } from "../Context/ContextShares";
 import AdsCarousel from "../components/AdsOverview/AdsCarousel";
@@ -17,7 +17,9 @@ export default function AdsOverview() {
   const location = useLocation();
   const [data, setData] = useState([]);
   const [sameTypeOfFraudData, setSameTypeOfFraudData] = useState([]);
+  const [typeOfFraudLink, setTypeOfFraudLink] = useState([]);
   const { discoverData, setDiscoverData } = useContext(discoverDataContext);
+  const { fraudLists, setFraudLists } = useContext(fraudListsContext);
 
   const fullPath = decodeURIComponent(location.pathname.split("/")[3]);
 
@@ -37,6 +39,11 @@ export default function AdsOverview() {
       (item) => item.typeOfFraud === data.typeOfFraud
     );
     setSameTypeOfFraudData(allSameTypeOfFraud);
+    const linkOfFraud = fraudLists.filter(
+      (item) => item.title === data.typeOfFraud
+    );
+
+    setTypeOfFraudLink(linkOfFraud);
   }, [data]);
 
   const handleToTop = () => {
@@ -51,40 +58,30 @@ export default function AdsOverview() {
   }, [location]);
   return (
     <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] pb-20">
-      <div className=" flex items-center gap-x-2  border-0 py-6">
+      <div className=" flex items-center gap-x-2 flex-wrap  border-0 py-6">
         <Link to={"/"}>
           <h2 className="text-black hover:text-yellow-500 hover:cursor-pointer">
             Home
           </h2>
         </Link>
         <IoIosArrowForward className="text-yellow-500" />
-        <Link to={"/ads/all"}>
+        <Link to={"/ads/all/"}>
           <h2 className="text-black hover:text-yellow-500 hover:cursor-pointer">
             Search Results
           </h2>
         </Link>
-        {/* {selectedType !== "Any" ? (
-          <>
-            <IoIosArrowForward className="text-yellow-500" />
-            <Link to={"/ads/all"}>
-              <h2 className="text-black hover:text-yellow-500 hover:cursor-pointer">
-                {selectedType}
-              </h2>
-            </Link>
-          </>
-        ) : ( */}
+
         <>
           <IoIosArrowForward className="text-yellow-500" />
-          <Link to={`/ads/all`}>
+          <Link to={`/ads/${typeOfFraudLink[0]?.link}/`}>
             <h2 className="text-black hover:text-yellow-500 hover:cursor-pointer">
               {data.typeOfFraud}
             </h2>
           </Link>
         </>
-        {/* )} */}
         <>
           <IoIosArrowForward className="text-yellow-500" />
-          <h2 className="text-gray-500 hover:text-yellow-500 hover:cursor-pointer">
+          <h2 className="text-gray-500 ">
             {data.title}
           </h2>
         </>

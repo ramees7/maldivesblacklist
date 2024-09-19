@@ -4,6 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaRegDotCircle } from "react-icons/fa";
 import { fraudListsContext } from "../../Context/ContextShares";
+import { Link } from "react-router-dom";
 
 export default function HomeLanding() {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,7 +94,7 @@ export default function HomeLanding() {
                     </div>
                     <ul className="overflow-y-auto">
                       {filteredOptions.map((option, index) => (
-                        <div
+                        <Link to={`/ads/${option.link}`}
                           className="flex justify-between items-center cursor-pointer my-2 hover:text-green-500"
                           key={index}
                         >
@@ -106,7 +107,7 @@ export default function HomeLanding() {
                           <h4 className="w-[25px] h-[25px] rounded-full bg-[#537cd9] font-semibold text-white">
                             {option.count}
                           </h4>
-                        </div>
+                        </Link>
                       ))}
                     </ul>
                   </div>

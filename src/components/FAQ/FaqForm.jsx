@@ -382,10 +382,10 @@ export default function FaqForm() {
     <>
       <div className="bg-white text-gray-700 w-full mb-5 py-4 rounded-lg lg:w-[350px]">
         <h1 className="py-3 border-b-2 px-4">Useful Links</h1>
-        <Link to={"/contact"}>
+        <Link to={"/contact/"}>
           <h1 className="mb-1 pt-3 px-4 hover:text-yellow-500">Contact Us</h1>
         </Link>
-        <Link to={"/login"}>
+        <Link to={"/login/"}>
           <h1 className="py-1 px-4 hover:text-yellow-500">
             Login and Register
           </h1>

@@ -70,7 +70,7 @@ export default function ClassifiedAds({ allData }) {
   const resultsCount = filteredFraudData.length;
 
   const handleClose = () => {
-    navigate("/ads/all");
+    navigate("/ads/all/");
     setSelectedType("");
   };
 
@@ -85,7 +85,7 @@ export default function ClassifiedAds({ allData }) {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    navigate(`?page=${pageNumber}`);
+    navigate(`?page=${pageNumber}/`);
   };
 
   useEffect(() => {
@@ -237,95 +237,107 @@ export default function ClassifiedAds({ allData }) {
 
       {/* Cards Layout */}
       <div
-        className={
-          isGridView
-            ? "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-10"
-            : "space-y-6  "
+        className={`${
+          currentItems.length > 0
+            ? isGridView
+              ? "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-10"
+              : "space-y-6  "
+            : "w-full"
         }
+          `}
       >
-        {currentItems.map((item) => {
-          const isItemInCompare = compareData.some(
-            (compareItem) => compareItem.id === item.id
-          );
-          return (
-            <div
-              key={item.id}
-              className={`relative bg-white shadow-lg rounded-lg overflow-hidden ${
-                isGridView ? "" : "flex flex-row items-start"
-              }`}
-              onMouseEnter={() => setHoveredCardId(item.id)}
-              onMouseLeave={() => setHoveredCardId(null)}
-            >
-              <Link
-                to={`/ads/${item.typeOfFraud}/${item.title}/`}
-                className={`${
-                  isGridView ? "" : "flex items-center"
-                } cursor-pointer`}
+        {currentItems.length > 0 ? (
+          currentItems.map((item) => {
+            const isItemInCompare = compareData.some(
+              (compareItem) => compareItem.id === item.id
+            );
+            return (
+              <div
+                key={item.id}
+                className={`relative bg-white shadow-lg rounded-lg overflow-hidden ${
+                  isGridView ? "" : "flex flex-row items-start"
+                }`}
+                onMouseEnter={() => setHoveredCardId(item.id)}
+                onMouseLeave={() => setHoveredCardId(null)}
               >
-                <div className="relative">
-                  <img
-                    src={item.images[0]}
-                    alt={item.title}
-                    className={`object-cover ${
-                      isGridView ? "h-[200px] w-full" : "h-52 w-52"
-                    }`}
-                  />
-                  {hoveredCardId === item.id && (
-                    <div className="absolute inset-0  bg-black bg-opacity-50  flex items-center justify-center transition-opacity duration-300">
-                      <Carousel images={item.images} />
-                    </div>
-                  )}
-                </div>
-
-                <div className={`p-4 ${isGridView ? "" : "flex-1"}`}>
-                  <div className="min-h-[80px] h-[100px] max-h-fit">
-                    <h2 className="font-semibold text-lg">{item.title}</h2>
-                    <p
-                      className={`text-gray-500 ${
-                        isGridView ? "hidden" : "block"
+                <Link
+                  to={`/ads/${item.typeOfFraud}/${item.title}/`}
+                  className={`${
+                    isGridView ? "" : "flex items-center"
+                  } cursor-pointer`}
+                >
+                  <div className="relative">
+                    <img
+                      src={item.images[0]}
+                      alt={item.title}
+                      className={`object-cover ${
+                        isGridView ? "h-[200px] w-full" : "h-52 w-52"
                       }`}
-                    >
-                      {item.description}
-                    </p>
-                  </div>
-                  <div className=" flex items-center justify-between text-gray-500 text-sm border-t-2 py-3">
-                    <div className="flex items-center ">
-                      <div onClick={(e) => e.preventDefault()}>
-                        <Modal data={item} isItemInCompare={isItemInCompare} />
+                    />
+                    {hoveredCardId === item.id && (
+                      <div className="absolute inset-0  bg-black bg-opacity-50  flex items-center justify-center transition-opacity duration-300">
+                        <Carousel images={item.images} />
                       </div>
+                    )}
+                  </div>
 
-                      <button
-                        className={`p-2 border-2 rounded-full mx-2 ${
-                          isItemInCompare
-                            ? "bg-blue-500 text-white border-blue-500"
-                            : "hover:text-[#537cd9] hover:border-[#537cd9]"
+                  <div className={`p-4 ${isGridView ? "" : "flex-1"}`}>
+                    <div className="min-h-[80px] h-[100px] max-h-fit">
+                      <h2 className="font-semibold text-lg">{item.title}</h2>
+                      <p
+                        className={`text-gray-500 ${
+                          isGridView ? "hidden" : "block"
                         }`}
-                        onClick={(e) => handleCompareClick(e, item)}
                       >
-                        <IoIosGitCompare />
-                      </button>
-                      {showPopup && <ComparisonBox />}
-
-                      <button
-                        className="hover:text-[#537cd9] hover:border-[#537cd9] p-2 border-2 rounded-full "
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
-                      >
-                        <CiHeart />
-                      </button>
+                        {item.description}
+                      </p>
                     </div>
-                    <div>
-                      <h3 className="text-md text-gray-500">
-                        {item.views} views
-                      </h3>
+                    <div className=" flex items-center justify-between text-gray-500 text-sm border-t-2 py-3">
+                      <div className="flex items-center ">
+                        <div onClick={(e) => e.preventDefault()}>
+                          <Modal
+                            data={item}
+                            isItemInCompare={isItemInCompare}
+                          />
+                        </div>
+
+                        <button
+                          className={`p-2 border-2 rounded-full mx-2 ${
+                            isItemInCompare
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : "hover:text-[#537cd9] hover:border-[#537cd9]"
+                          }`}
+                          onClick={(e) => handleCompareClick(e, item)}
+                        >
+                          <IoIosGitCompare />
+                        </button>
+                        {showPopup && <ComparisonBox />}
+
+                        <button
+                          className="hover:text-[#537cd9] hover:border-[#537cd9] p-2 border-2 rounded-full "
+                          onClick={(e) => {
+                            e.preventDefault();
+                          }}
+                        >
+                          <CiHeart />
+                        </button>
+                      </div>
+                      <div>
+                        <h3 className="text-md text-gray-500">
+                          {item.views} views
+                        </h3>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </div>
-          );
-        })}
+                </Link>
+              </div>
+            );
+          })
+        ) : (
+          <div className="text-3xl font-bold text-red-500 text-center w-full py-10">
+            <h1>No Fraud Detected</h1>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-between mt-10">

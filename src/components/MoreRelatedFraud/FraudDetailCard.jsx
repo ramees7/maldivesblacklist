@@ -7,10 +7,7 @@ import ComparisonBox from "../Details.jsx/ComparisonBox";
 import { CiHeart } from "react-icons/ci";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-export default function FraudDetailCard({
-  filteredFraudData,
-  isPosteduserMorePosts,
-}) {
+export default function FraudDetailCard({ filteredFraudData }) {
   const [hoveredCardId, setHoveredCardId] = useState(null);
   const { compareData, setCompareData } = useContext(compareDataContext);
   const [showPopup, setShowPopup] = useState(false);
@@ -48,7 +45,7 @@ export default function FraudDetailCard({
             onMouseEnter={() => setHoveredCardId(item.id)}
             onMouseLeave={() => setHoveredCardId(null)}
           >
-            <Link to={`/ads/${item.typeOfFraud}/${item.title}`} className="">
+            <Link to={`/ads/${item.typeOfFraud}/${item.title}/`} className="">
               <div className="relative">
                 <img
                   src={item.images[0]}

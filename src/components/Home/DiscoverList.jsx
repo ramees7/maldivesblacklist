@@ -21,7 +21,7 @@ export default function DiscoverList() {
       <div className="pt-16 grid grid-cols-12 gap-8">
         {fraudLists?.map((item) => (
           <Link
-            to={`/ads/${item.link}`}
+            to={`/ads/${item.link}/`}
             className="col-span-6 md:col-span-4 rounded-lg lg:col-span-3 h-[300px] w-full border-2 relative group"
             key={item.title}
           >
@@ -41,7 +41,7 @@ export default function DiscoverList() {
           </Link>
         ))}
         <Link
-          to={"/"}
+          to={"/ads/all/"}
           className="relative col-span-12 md:col-span-8 rounded-lg lg:col-span-3 h-[300px] w-full border-2 text-white px-5"
           style={{
             backgroundImage: `url(${moreBgImg})`,

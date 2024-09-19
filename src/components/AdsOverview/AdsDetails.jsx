@@ -21,27 +21,50 @@ export default function AdsDetails() {
 
   useEffect(() => {
     if (discoverData && fullPath) {
-      const dataArray=discoverData?.filter((item) => item.title == fullPath)
-      setData(dataArray[0])
+      const dataArray = discoverData?.filter((item) => item.title === fullPath);
+      setData(dataArray[0]);
     }
-  }, [location]);
+  }, [location, discoverData, fullPath]);
+
+  const getTimeDifference = (joinedDate) => {
+    const postedDate = new Date(joinedDate);
+    const currentDate = new Date();
+
+    const diffInMilliseconds = currentDate - postedDate;
+    const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+
+    if (diffInDays < 30) {
+      // Handle singular and plural for days
+      return diffInDays === 1 ? "1 day ago" : `${diffInDays} days ago`;
+    } else if (diffInDays < 365) {
+      const diffInMonths = Math.floor(diffInDays / 30);
+      // Handle singular and plural for months
+      return diffInMonths === 1 ? "1 month ago" : `${diffInMonths} months ago`;
+    } else {
+      const diffInYears = Math.floor(diffInDays / 365);
+      // Handle singular and plural for years
+      return diffInYears === 1 ? "1 year ago" : `${diffInYears} years ago`;
+    }
+  };
 
   return (
     <div>
-      <div className="grid grid-cols-12 gap-5 py-8 ">
+      <div className="grid grid-cols-12 gap-5 py-8">
         <div className="md:col-span-8 col-span-12 flex flex-col justify-between bg-white shadow-md p-8 rounded-lg">
-          <div className="">
+          <div>
             <div className="flex justify-between md:pe-8 items-center pb-8">
               <h3 className="text-gray-500 text-md flex items-center gap-x-2">
                 <CiClock1 />
-                {data?.dateOfPosted} days ago
+                {data?.joinedDate && getTimeDifference(data?.joinedDate)}
               </h3>
               <h3 className="text-gray-500 text-md flex items-center gap-x-2">
                 <IoEyeOutline />
-                {data?.views} views
+                {data?.views > 1
+                  ? `${data?.views} views `
+                  : `${data?.views} view`}
               </h3>
             </div>
-            <div className="">
+            <div>
               <h2 className="md:text-3xl text-2xl font-semibold pb-8">
                 {data?.title}
               </h2>
@@ -51,7 +74,7 @@ export default function AdsDetails() {
               <h2 className="text-2xl font-semibold text-gray-700 pb-5">
                 {data?.description}
               </h2>
-              <h2 className="text-lg  text-gray-700 flex gap-x-2 items-center pb-5">
+              <h2 className="text-lg text-gray-700 flex gap-x-2 items-center pb-5">
                 <GoAlertFill className="text-yellow-500" /> FRAUD ALERT{" "}
               </h2>
               <h2 className="text-md text-gray-700 pb-5 underline">
@@ -65,11 +88,11 @@ export default function AdsDetails() {
             </div>
           </div>
         </div>
-        <div className="md:col-span-4 col-span-12 ">
+        <div className="md:col-span-4 col-span-12">
           <div className="bg-white shadow-md p-8 rounded-lg mb-10">
-            <div className="grid grid-cols-7 ">
+            <div className="grid grid-cols-7">
               <div className="col-span-2 flex justify-center">
-                <AiOutlineUser className="text-5xl text-[#f2f2f2] p-2 rounded-full bg-[#d5e3ee] " />
+                <AiOutlineUser className="text-5xl text-[#f2f2f2] p-2 rounded-full bg-[#d5e3ee]" />
               </div>
               <div className="col-span-5 flex justify-start">
                 <div>
@@ -77,10 +100,11 @@ export default function AdsDetails() {
                     {data?.reportedUser}
                   </h1>
                   <h3 className="mb-2">
-                    Member since: {data?.userCurrentStatus}
+                    Member since:{" "}
+                    {data?.joinedDate && getTimeDifference(data?.joinedDate)}
                   </h3>
                   <Link
-                    to={"/"}
+                    to={`/user/${data.reportedUser}/`}
                     className="underline text-blue-500 font-semibold"
                   >
                     See all ads
@@ -102,10 +126,10 @@ export default function AdsDetails() {
               <div className="border-2 rounded-full p-3 hover:text-[#537cd9] hover:border-[#537cd9]">
                 <CiHeart />
               </div>
-              <div className="border-2 rounded-full p-3  hover:text-[#537cd9] hover:border-[#537cd9]">
+              <div className="border-2 rounded-full p-3 hover:text-[#537cd9] hover:border-[#537cd9]">
                 <IoIosGitCompare />
               </div>
-              <div className="border-2 rounded-full p-3  hover:text-[#537cd9] hover:border-[#537cd9]">
+              <div className="border-2 rounded-full p-3 hover:text-[#537cd9] hover:border-[#537cd9]">
                 <IoPrintOutline />
               </div>
             </div>

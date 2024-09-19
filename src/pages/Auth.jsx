@@ -15,10 +15,10 @@ export default function Auth() {
 
   // Detect the URL path to switch between login and register
   useEffect(() => {
-    if (location.pathname === "/register") {
-      setActiveTab("register");
+    if (location.pathname === "/register/") {
+      setActiveTab("register/");
     } else {
-      setActiveTab("login");
+      setActiveTab("login/");
     }
   }, [location]);
 
@@ -60,17 +60,17 @@ export default function Auth() {
         <div className="flex justify-between w-full gap-x-4">
           <div
             className={`${
-              activeTab === "login" ? "bg-[#f2f2f2]" : "bg-gray-300"
+              activeTab === "login/" ? "bg-[#f2f2f2]" : "bg-gray-300"
             } w-[50%] py-3 text-center rounded-t-md cursor-pointer`}
-            onClick={() => setActiveTab("login")}
+            onClick={() => setActiveTab("login/")}
           >
             Login
           </div>
           <div
             className={`${
-              activeTab === "register" ? "bg-[#f2f2f2]" : "bg-gray-300"
+              activeTab === "register/" ? "bg-[#f2f2f2]" : "bg-gray-300"
             } w-[50%] py-3 text-center rounded-t-md cursor-pointer`}
-            onClick={() => setActiveTab("register")}
+            onClick={() => setActiveTab("register/")}
           >
             Register
           </div>
@@ -90,8 +90,8 @@ export default function Auth() {
             </div>
             <h4 className="text-center mb-5 text-lg">or</h4>
           </div>
-          {activeTab === "login" && <Login />}
-          {activeTab === "register" && <Register />}
+          {activeTab === "login/" && <Login />}
+          {activeTab === "register/" && <Register />}
         </div>
       </div>
     </div>

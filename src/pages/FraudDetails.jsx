@@ -58,14 +58,14 @@ export default function FraudDetails() {
   return (
     <div>
       <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] py-6">
-        <div className=" flex items-center gap-x-2  border-0 ">
+        <div className=" flex items-center gap-x-2 flex-wrap  border-0 ">
           <Link to={"/"}>
             <h2 className="text-black hover:text-yellow-500 hover:cursor-pointer">
               Home
             </h2>
           </Link>
           <IoIosArrowForward className="text-yellow-500" />
-          <Link to={"/ads/all"}>
+          <Link to={"/ads/all/"}>
             <h2 className="text-black hover:text-yellow-500 hover:cursor-pointer">
               Search Results
             </h2>

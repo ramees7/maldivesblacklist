@@ -23,7 +23,7 @@ export default function JoinTheFight() {
         </h6>
         <div className="md:block hidden">
           <div className=" bg-yellow-500 w-fit font-semibold text-lg text-gray-600 rounded hidden lg:block">
-            <Link to={"/report"}>
+            <Link to={"/report/"}>
               <button className="py-3 xl:px-6 lg:px-3 flex gap-x-4 items-center">
                 Repost Now <FaArrowRightLong />
               </button>

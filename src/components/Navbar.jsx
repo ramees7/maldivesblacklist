@@ -33,7 +33,7 @@ export default function Navbar() {
   const navLinks = [
     {
       title: "Home",
-      link: "/",
+      link: "",
     },
     {
       title: "About",
@@ -62,7 +62,7 @@ export default function Navbar() {
       >
         <div className="flex justify-around py-5 ">
           <div className="py-3 px-4 bg-[#537cd9] font-semibold text-lg text-white rounded">
-            <Link to={"/report"}>
+            <Link to={"/report/"}>
               <button className="py-2 px-4">Repost Fraud +</button>
             </Link>
           </div>
@@ -73,7 +73,7 @@ export default function Navbar() {
         <div className="bg-white ">
           <ul className="flex flex-col justify-center items-start p-4 font-bold text-lg space-y-4 ">
             {navLinks?.map((item) => (
-              <Link to={`${item.link}`} key={item.link}>
+              <Link to={`${item.link}/`} key={item.link}>
                 <li>{item.title}</li>
               </Link>
             ))}
@@ -106,7 +106,7 @@ export default function Navbar() {
           <div className="hidden lg:flex lg:w-[70%]">
             <ul className="flex justify-around font-bold text-lg w-full">
               {navLinks?.map((item) => (
-                <Link to={`${item.link}`} key={item.title}>
+                <Link to={`${item.link}/`} key={item.title}>
                   <li>{item.title}</li>
                 </Link>
               ))}
@@ -125,29 +125,29 @@ export default function Navbar() {
         {/* Right side: Login, Register, and Repost Button */}
         <div className="lg:col-span-6 col-span-3 flex justify-end items-center">
           <div className="hidden lg:flex lg:w-[50%] xl:w-[60%] justify-around text-lg font-bold">
-            <Link to={"/login"}>
+            <Link to={"/login/"}>
               <div className="p-2 border-2 border-black rounded-full flex items-center">
                 <LuUser />
               </div>
             </Link>
             <div className="flex items-center border-r-2 xl:pe-8 lg:pe-3">
-              <Link to={"/login"}>
+              <Link to={"/login/"}>
                 <h1>Login</h1>
               </Link>
             </div>
             <div className="flex items-center xl:pe-8">
-              <Link to={"/register"}>
+              <Link to={"/register/"}>
                 <h1>Register</h1>
               </Link>
             </div>
           </div>
           <div className=" bg-[#537cd9] font-semibold text-lg text-white rounded hidden lg:block">
-            <Link to={"/report"}>
+            <Link to={"/report/"}>
               <button className="py-3 xl:px-6 lg:px-3">Repost Fraud +</button>
             </Link>
           </div>
           <div className="block lg:hidden">
-            <Link to={"/login"}>
+            <Link to={"/login/"}>
               <div className="p-2 border-2 border-black rounded-full flex items-center text-2xl font-bold">
                 <LuUser />
               </div>

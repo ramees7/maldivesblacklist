@@ -113,7 +113,7 @@ export default function FraudTypes({ offcanvas, data, allData }) {
       setAdsChanging(filteredData);
     }
 
-    navigate(`/ads/${link}`);
+    navigate(`/ads/${link}/`);
   };
 
   const visibleOptions = fraudOptions.filter(

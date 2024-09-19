@@ -110,7 +110,7 @@ export default function Modal({ data, isItemInCompare }) {
                 </div>
                 <div className="flex justify-between items-center mt-5">
                   <div className=" bg-[#537cd9] font-semibold text-lg text-white rounded w-fit">
-                    <Link to={""}>
+                    <Link to={"/"}>
                       <button className="py-3 px-4 flex items-center gap-x-2">
                         View More <FaArrowRightLong />
                       </button>

@@ -72,13 +72,13 @@ export default function MoreRelatedFraud({
           <div className="hidden md:block">
             <div className="flex gap-x-4 text-white items-center">
               {isPosteduserMorePosts ? (
-                <Link to={"/ads/all"}>
+                <Link to={"/ads/all/"}>
                   <button className="py-3 px-6 w-fit bg-[#537cd9] font-semibold rounded-md flex items-center gap-x-2 justify-center">
                     Display all from name
                   </button>
                 </Link>
               ) : (
-                <Link to={"/ads/all"}>
+                <Link to={"/ads/all/"}>
                   <button className="py-3 px-6 w-fit bg-[#537cd9] font-semibold rounded-md flex items-center gap-x-2 justify-center">
                     Start a new search
                   </button>
@@ -127,13 +127,13 @@ export default function MoreRelatedFraud({
         <div className="md:hidden block mt-10">
           <div className="flex text-white justify-between items-center">
             {isPosteduserMorePosts ? (
-              <Link to={"/ads/all"}>
+              <Link to={"/ads/all/"}>
                 <button className="py-3 px-6 w-fit bg-[#537cd9] font-semibold rounded-md flex items-center gap-x-2 justify-center">
                   Display all from name
                 </button>
               </Link>
             ) : (
-              <Link to={"/ads/all"}>
+              <Link to={"/ads/all/"}>
                 <button className="py-3 px-6 w-fit bg-[#537cd9] font-semibold rounded-md flex items-center gap-x-2 justify-center">
                   Start a new search
                 </button>

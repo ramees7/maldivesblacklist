@@ -110,7 +110,7 @@ export default function ContactLanding() {
             </div> */}
             <div className="flex justify-center">
               <div className=" bg-[#537cd9] w-fit font-semibold text-lg text-white rounded hidden lg:block">
-                <Link to={"/report"}>
+                <Link to={"/report/"}>
                   <button className="py-3 xl:px-6 lg:px-3 flex gap-x-4 items-center">
                     Send Message <FaArrowRightLong />
                   </button>

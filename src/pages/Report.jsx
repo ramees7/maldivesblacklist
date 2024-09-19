@@ -71,11 +71,11 @@ export default function Report() {
       <div className="border-dotted border-2 border-gray-400 rounded-lg py-7 text-center mb-10">
         <h1 className="text-lg font-semibold">
           You can also{" "}
-          <Link to={"/login"} className="text-blue-600">
+          <Link to={"/login/"} className="text-blue-600">
             Log In
           </Link>{" "}
           or{" "}
-          <Link to={"/register"} className="text-blue-600">
+          <Link to={"/register/"} className="text-blue-600">
             Register
           </Link>{" "}
           first.
@@ -256,7 +256,7 @@ export default function Report() {
             {/* Submit Button */}
             <div className="flex justify-end my-10">
               <Link
-                to={"/report"}
+                to={"/report/"}
                 className=" bg-[#537cd9] font-semibold text-lg text-white rounded w-fit"
               >
                 <button className="py-3 px-6">Repost Fraud +</button>
