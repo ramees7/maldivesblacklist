@@ -7,7 +7,7 @@ import ComparisonBox from "../Details.jsx/ComparisonBox";
 import { CiHeart } from "react-icons/ci";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-export default function FraudDetailCard({ filteredFraudData }) {
+export default function FraudDetailCard({ filteredFraudData, userView }) {
   const [hoveredCardId, setHoveredCardId] = useState(null);
   const { compareData, setCompareData } = useContext(compareDataContext);
   const [showPopup, setShowPopup] = useState(false);
@@ -32,7 +32,11 @@ export default function FraudDetailCard({ filteredFraudData }) {
   };
 
   return (
-    <div className="flex gap-6 pt-10 w-full">
+    <div
+      className={`${
+        !userView ? "grid grid-cols-12 gap-6 pt-10" : "flex gap-6 pt-10 w-full"
+      } `}
+    >
       {filteredFraudData.map((item) => {
         const isItemInCompare = compareData.some(
           (compareItem) => compareItem.id === item.id
@@ -41,7 +45,9 @@ export default function FraudDetailCard({ filteredFraudData }) {
         return (
           <div
             key={item.id}
-            className="relative bg-white shadow-lg rounded-lg overflow-hidden lg:w-1/4 md:w-1/2 w-[400px]"
+            className={`${
+              !userView ? "md:col-span-4 lg:col-span-3 col-span-12 " : " lg:w-1/4 md:w-1/2 w-[400px]"
+            } relative bg-white shadow-lg rounded-lg overflow-hidden`}
             onMouseEnter={() => setHoveredCardId(item.id)}
             onMouseLeave={() => setHoveredCardId(null)}
           >

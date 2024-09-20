@@ -209,11 +209,11 @@ export default function ClassifiedAds({ allData }) {
           <div className="flex items-center space-x-3 md:my-5 lg:my-0">
             <h1>Sort by:</h1>
             <select
-              className="rounded px-2 h-[50px] outline-none"
+              className=" px-2 h-[50px] outline-none"
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
             >
-              <option value="most-relevant" disabled className="rounded-none">
+              <option value="most-relevant" disabled className="">
                 Most Relevant
               </option>
               <option value="latest">Latest</option>
