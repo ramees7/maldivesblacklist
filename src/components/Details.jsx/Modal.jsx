@@ -34,7 +34,6 @@ export default function Modal({ data, isItemInCompare }) {
     // setShowPopup(true);
   };
 
-
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("CompareData"));
     if (storedData && Array.isArray(storedData)) {
@@ -49,14 +48,22 @@ export default function Modal({ data, isItemInCompare }) {
   }, [compareData]);
 
   const onClose = (e) => {
-    // e.preventDefault()
+    e.preventDefault();
     setIsModalOpen(false);
   };
 
   // Function to open the modal
   const handleOpenModal = (e) => {
-    // e.preventDefault()
+    e.preventDefault();
     setIsModalOpen(true);
+  };
+
+  const handleClickOutside = (e) => {
+    // Close the modal if clicking outside the modal content
+    if (e.target.id === "modal-overlay") {
+      setIsModalOpen(false);
+      e.preventDefault();
+    }
   };
 
   if (!data) return null;
@@ -72,7 +79,11 @@ export default function Modal({ data, isItemInCompare }) {
 
       {/* Modal structure */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex w-full items-center justify-center cursor-default">
+        <div
+          className="fixed inset-0 z-50 bg-black bg-opacity-75 flex w-full items-center justify-center cursor-default"
+          id="modal-overlay"
+          onClick={handleClickOutside}
+        >
           <div className="bg-white rounded-lg shadow-lg  w-[75%] p-8 relative">
             {/* Close button */}
             <button

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  compareDataContext,
   discoverDataContext,
   selectedFraudDetailContext,
 } from "../../Context/ContextShares";
@@ -11,20 +12,58 @@ import { Link, useLocation } from "react-router-dom";
 import { IoIosChatboxes, IoIosGitCompare } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { PiWarningDiamond } from "react-icons/pi";
+import ComparisonBox from "../Details.jsx/ComparisonBox";
+import faqBg from "../../assets/images/faq_banner.jpg";
+import ReportAbuseModal from "../Modals/ReportAbuseModal";
+import ChatModal from "../Modals/ChatModal";
 
 export default function AdsDetails() {
   const location = useLocation();
   const [data, setData] = useState([]);
   const { discoverData, setDiscoverData } = useContext(discoverDataContext);
+  const { compareData, setCompareData } = useContext(compareDataContext);
+  const [showPopup, setShowPopup] = useState(false);
 
   const fullPath = decodeURIComponent(location.pathname.split("/")[3]);
 
   useEffect(() => {
     if (discoverData && fullPath) {
-      const dataArray = discoverData?.filter((item) => item.title === fullPath);
+      const dataArray = discoverData.filter((item) => item.title === fullPath);
       setData(dataArray[0]);
     }
   }, [location, discoverData, fullPath]);
+
+  const handleCompareClick = (e) => {
+    e.preventDefault();
+
+    const isItemInCompare = compareData.some(
+      (compareItem) => compareItem.id === data.id
+    );
+
+    if (isItemInCompare) {
+      const updatedCompareData = compareData.filter(
+        (compareItem) => compareItem.id !== data.id
+      );
+      setCompareData(updatedCompareData);
+    } else {
+      setCompareData([...compareData, data]);
+    }
+
+    setShowPopup(true);
+  };
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("CompareData"));
+    if (storedData && Array.isArray(storedData)) {
+      setCompareData(storedData);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (compareData.length > 0) {
+      localStorage.setItem("CompareData", JSON.stringify(compareData));
+    }
+  }, [compareData]);
 
   const getTimeDifference = (joinedDate) => {
     const postedDate = new Date(joinedDate);
@@ -34,17 +73,64 @@ export default function AdsDetails() {
     const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
 
     if (diffInDays < 30) {
-      // Handle singular and plural for days
       return diffInDays === 1 ? "1 day ago" : `${diffInDays} days ago`;
     } else if (diffInDays < 365) {
       const diffInMonths = Math.floor(diffInDays / 30);
-      // Handle singular and plural for months
       return diffInMonths === 1 ? "1 month ago" : `${diffInMonths} months ago`;
     } else {
       const diffInYears = Math.floor(diffInDays / 365);
-      // Handle singular and plural for years
       return diffInYears === 1 ? "1 year ago" : `${diffInYears} years ago`;
     }
+  };
+
+  const isItemInCompare = compareData.some(
+    (compareItem) => compareItem.id === data.id
+  );
+
+  // handle Print
+
+  const handlePrint = () => {
+    const printContent = document.createElement("div");
+
+    // Add the website name and logo
+    printContent.innerHTML = `
+      <div style="display:flex ; justify-content:center; align-items:center ; height:100% ;flex-direction: column;">
+        <h1 style="font-weight:800;">Maldives Black List</h1></br>
+        <h2>Type Of Fraud : ${data?.typeOfFraud}</h2>
+        <h2>Title : ${data?.title}</h2>
+        <h2>Description : ${data?.description}</h2>
+        <h2>Reported User : ${data?.reportedUser.toUpperCase()}</h2>
+      </div>
+    `;
+
+    // Add the images
+    data?.images.forEach((image, index) => {
+      printContent.innerHTML += `
+        <div style="page-break-after: always; text-align: center;">
+          <img src="${image}" alt="Image ${
+        index + 1
+      }" style="width: 100%; max-width: 600px; height:100%"/>
+        </div>
+      `;
+    });
+
+    // Create a new window for printing
+    const newWindow = window.open("", "_blank");
+    newWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Document</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            img { max-width: 100%; height: auto; }
+          </style>
+        </head>
+        <body>${printContent.innerHTML}</body>
+      </html>
+    `);
+    newWindow.document.close();
+    newWindow.print();
+    newWindow.close();
   };
 
   return (
@@ -75,14 +161,9 @@ export default function AdsDetails() {
                 {data?.description}
               </h2>
               <h2 className="text-lg text-gray-700 flex gap-x-2 items-center pb-5">
-                <GoAlertFill className="text-yellow-500" /> FRAUD ALERT{" "}
-              </h2>
-              <h2 className="text-md text-gray-700 pb-5 underline">
-                {" "}
-                {data?.title} Fraud
+                <GoAlertFill className="text-yellow-500" /> FRAUD ALERT
               </h2>
               <h2 className="text-md text-gray-700 pb-5">
-                {" "}
                 {data?.detailedDescription}
               </h2>
             </div>
@@ -113,31 +194,40 @@ export default function AdsDetails() {
               </div>
             </div>
             <div className="flex justify-center gap-x-4 text-white pt-20">
-              <button className="py-3 w-[42%] bg-[#537cd9] rounded-md flex items-center gap-x-2 justify-center">
-                <IoIosChatboxes /> Chat
-              </button>
+              <ChatModal/>
               <button className="py-3 w-[42%] bg-[#537cd9] rounded-md flex items-center gap-x-2 justify-center">
                 <MdEmail /> E-mail
               </button>
             </div>
           </div>
           <div className="bg-white shadow-md p-8 rounded-lg mb-8">
-            <div className="flex gap-x-4 text-2xl justify-center">
-              <div className="border-2 rounded-full p-3 hover:text-[#537cd9] hover:border-[#537cd9]">
+            <div className="flex gap-x-4  justify-center">
+              <div className="border-2 rounded-full text-2xl p-3 hover:text-[#537cd9] hover:border-[#537cd9]">
                 <CiHeart />
               </div>
-              <div className="border-2 rounded-full p-3 hover:text-[#537cd9] hover:border-[#537cd9]">
-                <IoIosGitCompare />
+              <div className="">
+                <button
+                  className={`border-2 rounded-full p-3 text-2xl  ${
+                    isItemInCompare
+                      ? "bg-blue-500 text-white border-blue-500"
+                      : "hover:text-[#537cd9] hover:border-[#537cd9]"
+                  }`}
+                  onClick={handleCompareClick}
+                >
+                  <IoIosGitCompare />
+                </button>
+                {showPopup && <ComparisonBox />}
               </div>
-              <div className="border-2 rounded-full p-3 hover:text-[#537cd9] hover:border-[#537cd9]">
+              <div
+                className="border-2 rounded-full p-3 text-2xl hover:text-[#537cd9] hover:border-[#537cd9] cursor-pointer"
+                onClick={handlePrint}
+              >
                 <IoPrintOutline />
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-x-3 text-red-600 justify-center text-xl">
-            <PiWarningDiamond />
-            <span>Report abuse</span>
-          </div>
+          <ReportAbuseModal/>
+          
         </div>
       </div>
     </div>

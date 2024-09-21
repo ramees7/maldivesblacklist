@@ -1,2 +1,5 @@
 Modal   link
 fraudTypes fraudoptions
+
+
+userview if logined then send message  not logined the navigate to login

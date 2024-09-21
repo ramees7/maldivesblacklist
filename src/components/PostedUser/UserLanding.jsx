@@ -1,8 +1,13 @@
 import React from "react";
 import userBg from "../../assets/images/user_banner.jpg";
 import { BiUser } from "react-icons/bi";
+import { useLocation } from "react-router-dom";
 
 export default function UserLanding() {
+  const location=useLocation()
+
+  const name=location.pathname.split("/")[2]
+  
   return (
     <div>
       <div
@@ -25,7 +30,7 @@ export default function UserLanding() {
           />
         </div>
         <div className=" mt-10 ">
-          <h1 className="text-4xl font-semibold text-center">User Name</h1>
+          <h1 className="text-4xl font-semibold text-center">{name.toUpperCase()}</h1>
           <div className="flex gap-x-2 justify-center items-center mt-2">
             <BiUser className="p-1 rounded-full text-3xl bg-yellow-500"/>
             <h3>Member since 1 week</h3>

@@ -241,11 +241,20 @@ export default function MoreRelatedFraud({
   };
 
   return (
-    <div className="relative w-full mx-auto overflow-hidden py-8">
-      <div className={`flex ${userview? "justify-center" :"md:justify-between"}  justify-center`}>
+    <div className="relative w-full mx-auto overflow-hidden pt-20 pb-10">
+      <div
+        className={`flex ${
+          userview ? "justify-center" : "md:justify-between"
+        }  justify-center`}
+      >
         <div className="lg:text-4xl md:text-3xl text-2xl font-bold text-gray-700">
           {userview ? (
-            <h1 className="text-3xl text-center">User Ads</h1>
+            <h1 className="text-3xl text-center flex items-center gap-x-3">
+              User Ads{" "}
+              <span className="bg-yellow-500 flex justify-center items-center rounded-full w-[30px] h-[30px]  text-lg">
+                {isPosteduserMorePosts?.length}
+              </span>
+            </h1>
           ) : (
             <>
               {isPosteduserMorePosts ? (
@@ -263,11 +272,15 @@ export default function MoreRelatedFraud({
             ) : (
               <>
                 {isPosteduserMorePosts ? (
-                  <Link to={"/ads/all/"}>
-                    <button className="py-3 px-6 w-fit bg-[#537cd9] font-semibold rounded-md flex items-center gap-x-2 justify-center">
-                      Display all from name
-                    </button>
-                  </Link>
+                  isPosteduserMorePosts.length > 0 && (
+                    <Link
+                      to={`/user/${isPosteduserMorePosts[0].reportedUser}/`}
+                    >
+                      <button className="py-3 px-6 w-fit bg-[#537cd9] font-semibold rounded-md flex items-center gap-x-2 justify-center">
+                        Display all from {isPosteduserMorePosts[0].reportedUser}
+                      </button>
+                    </Link>
+                  )
                 ) : (
                   <Link to={"/ads/all/"}>
                     <button className="py-3 px-6 w-fit bg-[#537cd9] font-semibold rounded-md flex items-center gap-x-2 justify-center">
@@ -275,6 +288,34 @@ export default function MoreRelatedFraud({
                     </button>
                   </Link>
                 )}
+                <div className="gap-x-4 flex">
+                  <button
+                    onClick={handlePrev}
+                    className={`p-4 bg-yellow-500 rounded-lg transition ${
+                      shouldDisableButtons || currentIndex === 0
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                    disabled={shouldDisableButtons || currentIndex === 0}
+                  >
+                    <FaArrowLeft />
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className={`p-4 bg-yellow-500 rounded-lg transition ${
+                      shouldDisableButtons ||
+                      currentIndex + itemsToShow >= dataToUse.length
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                    disabled={
+                      shouldDisableButtons ||
+                      currentIndex + itemsToShow >= dataToUse.length
+                    }
+                  >
+                    <FaArrowRight />
+                  </button>
+                </div>
               </>
             )}
           </div>
@@ -283,7 +324,7 @@ export default function MoreRelatedFraud({
 
       {userview ? (
         // Grid Layout when `userview` is true
-        <FraudDetailCard filteredFraudData={allUserData} userview={true}/>
+        <FraudDetailCard filteredFraudData={allUserData} userview={true} />
       ) : (
         // Carousel Layout when `userview` is false
         <>

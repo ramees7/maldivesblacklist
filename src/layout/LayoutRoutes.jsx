@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Home from "../pages/Home";
 import Footer from "../components/Footer";
@@ -39,6 +39,7 @@ export default function LayoutRoutes() {
   return (
     <div>
       <BrowserRouter>
+      
         <div
           className={`sticky top-0 w-full z-50 transition-transform duration-1000 xl:px-48 lg:px-20 md:px-12 px-5 bg-white ${
             showHeaderNav ? "translate-y-0" : "-translate-y-full"
@@ -49,6 +50,7 @@ export default function LayoutRoutes() {
 
         {/* <ErrorBoundary> */}
           <Routes>
+          
             <Route path="/" element={<Home />} />
             <Route path="/about/" element={<About />} />
             <Route path="/contact/" element={<Contact />} />
