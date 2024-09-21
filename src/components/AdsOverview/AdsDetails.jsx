@@ -16,6 +16,7 @@ import ComparisonBox from "../Details.jsx/ComparisonBox";
 import faqBg from "../../assets/images/faq_banner.jpg";
 import ReportAbuseModal from "../Modals/ReportAbuseModal";
 import ChatModal from "../Modals/ChatModal";
+import EmailModal from "../Modals/EmailModal";
 
 export default function AdsDetails() {
   const location = useLocation();
@@ -194,10 +195,8 @@ export default function AdsDetails() {
               </div>
             </div>
             <div className="flex justify-center gap-x-4 text-white pt-20">
-              <ChatModal/>
-              <button className="py-3 w-[42%] bg-[#537cd9] rounded-md flex items-center gap-x-2 justify-center">
-                <MdEmail /> E-mail
-              </button>
+              <ChatModal />
+              <EmailModal />
             </div>
           </div>
           <div className="bg-white shadow-md p-8 rounded-lg mb-8">
@@ -226,8 +225,7 @@ export default function AdsDetails() {
               </div>
             </div>
           </div>
-          <ReportAbuseModal/>
-          
+          <ReportAbuseModal />
         </div>
       </div>
     </div>
