@@ -87,7 +87,7 @@ export default function FraudDetails() {
             placeholder="I'm looking for..."
             className="w-full px-4 py-2 placeholder-black outline-none"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value,e.preventDefault())}
           />
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function FraudDetails() {
             <FraudTypes data={filteredFraudData} allData={discoverData} />
           </div>
           <div className="lg:col-span-9 col-span-12">
-            <ClassifiedAds allData={discoverData} />
+            <ClassifiedAds allData={discoverData} searchTerm={searchTerm}/>
             {/* <ClassifiedAds data={filteredFraudData} allData={discoverData} /> */}
           </div>
         </div>

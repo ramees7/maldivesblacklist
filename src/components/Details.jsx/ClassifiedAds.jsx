@@ -15,7 +15,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import ComparisonBox from "./ComparisonBox";
 
-export default function ClassifiedAds({ allData }) {
+export default function ClassifiedAds({ allData, searchTerm }) {
   const [isGridView, setIsGridView] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [hoveredCardId, setHoveredCardId] = useState(null);
@@ -34,12 +34,14 @@ export default function ClassifiedAds({ allData }) {
   const [locationPath, setLocationPath] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [filteredFraudData, setFilteredFraudData] = useState([]);
-  // const [compareDataStored, setCompareDataStored] = useState([]);
   const { discoverData, setDiscoverData } = useContext(discoverDataContext);
   const { compareData, setCompareData } = useContext(compareDataContext);
-  // const { selectedFraudDetail, setSelectedFraudDetail } = useContext(
-  //   selectedFraudDetailContext
-  // );
+
+  const [homeSearchTerm, setHomeSearchTerm] = useState("");
+
+  useEffect(() => {
+    setHomeSearchTerm(location.search.slice(1, -1));
+  }, [location]);
 
   useEffect(() => {
     setLocationPath(location.pathname.slice(5));
@@ -64,7 +66,8 @@ export default function ClassifiedAds({ allData }) {
       );
     }
     setFilteredFraudData(sortedData);
-  }, [filteredFraudData, sortOption]);
+    // }, [ sortOption,filteredFraudData]);
+  }, [sortOption]);
 
   useEffect(() => {
     if (adsChanging) {
@@ -80,6 +83,23 @@ export default function ClassifiedAds({ allData }) {
       }
     }
   }, [filteredData, adsChanging, location]);
+
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = allData.filter((item) =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      setFilteredFraudData(filtered);
+    } else if (homeSearchTerm) {
+      const filtered = allData.filter((item) =>
+        item.title.toLowerCase().includes(homeSearchTerm.toLowerCase())
+      );
+      setFilteredFraudData(filtered);
+    } else {
+      setFilteredFraudData(allData);
+    }
+  }, [searchTerm, allData, homeSearchTerm]);
 
   const resultsCount = filteredFraudData.length;
 

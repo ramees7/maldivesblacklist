@@ -3,17 +3,20 @@ import { TbBulb } from "react-icons/tb";
 import { FaSearch } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaRegDotCircle } from "react-icons/fa";
-import { discoverDataContext, fraudListsContext } from "../../Context/ContextShares";
-import { Link } from "react-router-dom";
+import {
+  discoverDataContext,
+  fraudListsContext,
+} from "../../Context/ContextShares";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function HomeLanding() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("Fraud Types");
   const { fraudLists, setFraudLists } = useContext(fraudListsContext);
-  const { discoverData, setDiscoverData } = useContext(discoverDataContext);
 
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   // Filter options based on the search term
   const filteredOptions = fraudLists.filter((option) =>
@@ -24,6 +27,13 @@ export default function HomeLanding() {
     setSelectedOption(option);
     setIsOpen(false);
     setSearchTerm(""); // Reset search on option selection
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Perform any action with searchTerm, like navigation or fetching data
+    // console.log("Submitted search term:", searchTerm);
+    navigate(`/ads/all?${searchTerm}/`)
   };
 
   // Close dropdown when clicking outside
@@ -57,13 +67,20 @@ export default function HomeLanding() {
               Against <span className="text-red-500">Fraud.</span>
             </h1>
           </div>
-          <div className="bg-[#f2f2f2] flex justify-between md:flex-nowrap flex-wrap md:h-[80px] h-fit md:gap-y-0 gap-y-3 text-black items-center p-3 gap-x-3 rounded-lg md:w-[700px] w-[80%] mx-auto">
+
+          {/* Form for capturing search term */}
+          <form
+            onSubmit={handleSubmit}
+            className="bg-[#f2f2f2] flex justify-between md:flex-nowrap flex-wrap md:h-[80px] h-fit md:gap-y-0 gap-y-3 text-black items-center p-3 gap-x-3 rounded-lg md:w-[700px] w-[80%] mx-auto"
+          >
             <div className="flex items-center gap-x-4 border-2 md:h-full h-[60px] rounded-lg px-2 md:w-[45%] w-[100%] bg-[#fff]">
               <TbBulb className="text-3xl" />
               <input
                 type="text"
                 placeholder="I'm looking for..."
                 className="focus:outline-none placeholder-black bg-[#fff]"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)} // Update search term as user types
               />
             </div>
 
@@ -84,7 +101,7 @@ export default function HomeLanding() {
                 </div>
                 {isOpen && (
                   <div className="absolute z-10 w-[250px] bg-[#fff] border border-gray-300 rounded-md mt-2 p-3">
-                    <div className="">
+                    <div id="hello">
                       <input
                         type="text"
                         placeholder="Search..."
@@ -95,7 +112,8 @@ export default function HomeLanding() {
                     </div>
                     <ul className="overflow-y-auto">
                       {filteredOptions.map((option, index) => (
-                        <Link to={`/ads/${option.link}`}
+                        <Link
+                          to={`/ads/${option.link}`}
                           className="flex justify-between items-center cursor-pointer my-2 hover:text-green-500"
                           key={index}
                         >
@@ -115,14 +133,18 @@ export default function HomeLanding() {
                 )}
               </div>
             </div>
-            <div className="flex justify-center items-center text-2xl md:bg-[#537cd9] w-[100%] md:w-[10%] text-white md:p-3 rounded-lg ">
+
+            <button
+              type="submit"
+              className="flex justify-center items-center text-2xl md:bg-[#537cd9] w-[100%] md:w-[10%] text-white md:p-3 rounded-lg"
+            >
               <div className="w-[50%] bg-[#537cd9] md:bg-none flex justify-center gap-x-4 md:hidden py-2 items-center font-normal text-xl rounded-lg">
                 <span>Search</span>
                 <FaSearch />
               </div>
-              <FaSearch className="md:block hidden"/>
-            </div>
-          </div>
+              <FaSearch className="md:block hidden" />
+            </button>
+          </form>
         </div>
       </div>
     </div>

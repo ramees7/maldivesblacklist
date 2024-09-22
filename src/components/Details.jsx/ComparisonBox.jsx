@@ -7,6 +7,8 @@ import {
   IoInformationCircle,
 } from "react-icons/io5";
 import { compareDataContext } from "../../Context/ContextShares";
+import { Link } from "react-router-dom";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 export default function ComparisonBox() {
   const [currentIndexComparison, setCurrentIndexComparison] = useState(0);
@@ -99,12 +101,13 @@ export default function ComparisonBox() {
           >
             <div className="flex justify-between  gap-x-3 p-4 rounded-lg">
               {compareData
-                .slice(currentIndexComparison, currentIndexComparison + itemsToShow)
+                .slice(
+                  currentIndexComparison,
+                  currentIndexComparison + itemsToShow
+                )
                 .map((item) => (
                   <div key={item.id} className="md:w-1/3 w-1/2">
-                    <div
-                      className="border-dashed border-2 border-gray-300 p-1 rounded-lg  flex items-center justify-center flex-col relative hover:border-transparent"
-                    >
+                    <div className="border-dashed border-2 border-gray-300 p-1 rounded-lg  flex items-center justify-center flex-col relative hover:border-transparent">
                       <div className="flex justify-center items-start">
                         <div
                           className="absolute top-2 right-2 bg-gray-200 rounded-full p-1 cursor-pointer"
@@ -119,7 +122,9 @@ export default function ComparisonBox() {
                         />
                       </div>
                     </div>
-                    <h1 className="text-center text-black mt-2">{item.title}</h1>
+                    <h1 className="text-center text-black mt-2">
+                      {item.title}
+                    </h1>
                   </div>
                 ))}
 
@@ -136,38 +141,53 @@ export default function ComparisonBox() {
                 )}
             </div>
 
-            {compareData.length < 2 && (
-              <div className="flex items-center mt-4 text-gray-500">
-                <div className="bg-yellow-200 text-yellow-700 p-2 rounded-full mr-2">
-                  <IoInformationCircle className="text-xl" />
+            <div className="flex justify-between px-5 mt-5">
+              {compareData.length < 2 ? (
+                <div className="flex items-center mt-4 text-gray-500">
+                  <div className="bg-yellow-200 text-yellow-700 p-2 rounded-full mr-2">
+                    <IoInformationCircle className="text-xl" />
+                  </div>
+                  <p>
+                    You’re almost there, select at least one more ad to compare!
+                  </p>
                 </div>
-                <p>You’re almost there, select at least one more ad to compare!</p>
-              </div>
-            )}
+              ) : (
+                <div className="bg-yellow-500 w-fit font-semibold text-lg text-white rounded">
+                  <Link
+                    to={`/compare/`}
+                    className="py-3 px-6 flex gap-x-4 items-center"
+                  >
+                    Compare <FaArrowRightLong />
+                  </Link>
+                </div>
+              )}
 
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={handlePrevComparison}
-                disabled={currentIndexComparison === 0}
-                className={`bg-yellow-200 p-2 rounded-full shadow-lg hover:bg-yellow-300 mx-1 ${
-                  currentIndexComparison === 0
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-              >
-                <IoArrowBackOutline className="text-xl text-yellow-700" />
-              </button>
-              <button
-                onClick={handleNextComparison}
-                disabled={currentIndexComparison + itemsToShow >= compareData.length}
-                className={`bg-yellow-200 p-2 rounded-full shadow-lg hover:bg-yellow-300 mx-1 ${
-                  currentIndexComparison + itemsToShow >= compareData.length
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-              >
-                <IoArrowForwardOutline className="text-xl text-yellow-700" />
-              </button>
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={handlePrevComparison}
+                  disabled={currentIndexComparison === 0}
+                  className={`bg-yellow-200 p-2 rounded-full shadow-lg hover:bg-yellow-300 mx-1 ${
+                    currentIndexComparison === 0
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  <IoArrowBackOutline className="text-xl text-yellow-700" />
+                </button>
+                <button
+                  onClick={handleNextComparison}
+                  disabled={
+                    currentIndexComparison + itemsToShow >= compareData.length
+                  }
+                  className={`bg-yellow-200 p-2 rounded-full shadow-lg hover:bg-yellow-300 mx-1 ${
+                    currentIndexComparison + itemsToShow >= compareData.length
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  <IoArrowForwardOutline className="text-xl text-yellow-700" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
