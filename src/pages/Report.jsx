@@ -3,54 +3,154 @@ import { CiCircleInfo } from "react-icons/ci";
 import { FaPlus, FaRegFile } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; 
+import "react-quill/dist/quill.snow.css";
 import { Link } from "react-router-dom";
 import { fraudListsContext } from "../Context/ContextShares";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 export default function Report() {
   const [description, setDescription] = useState("");
   const { fraudLists, setFraudLists } = useContext(fraudListsContext);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]); // For multiple files
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("Fraud Types");
-
+  const [imagePreview, setImagePreview] = useState(null);
   const dropdownRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false)
 
-  // Filter options based on the search term
+  const formik = useFormik({
+    initialValues: {
+      adName: "",
+      orderedProducts: "",
+      phoneNumber: "",
+      fraudType: "",
+      websiteLink: "",
+      socialMediaLink: "",
+      description: "",
+      evidence: [],
+    },
+    validationSchema: Yup.object({
+      adName: Yup.string().required("Ad Name is required"),
+      orderedProducts: Yup.string().optional(),
+      phoneNumber: Yup.string().matches(
+        /^[0-9]{10}$/,
+        "Phone number must be exactly 10 digits"
+      ),
+      description: Yup.string().required("Description is required"),
+      websiteLink: Yup.string().url("Invalid URL").optional(),
+      socialMediaLink: Yup.string().url("Invalid URL").optional(),
+      fraudType: Yup.string().required("Fraud Type is required"),
+      evidence: Yup.array().required("Evidence is required"),
+    }),
+    validateOnMount: true,
+    onSubmit: (values) => {
+      console.log("Form values:", values);
+    },
+  });
+
   const filteredOptions = fraudLists.filter((option) =>
     option.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Handler for text change
   const handleDescriptionChange = (value) => {
-    setDescription(value);
-  };
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setIsOpen(false);
-    setSearchTerm(""); // Reset search on option selection
+    formik.setFieldValue("description", value);
   };
 
-  // Close dropdown when clicking outside
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+    formik.setFieldValue("fraudType", option);
+    setIsOpen(false);
+    setSearchTerm("");
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
+  // const handleFileChange = (e) => {
+  //   const files = Array.from(e.target.files);
+
+  //   // Restrict to a maximum of 10 files
+  //   if (selectedFiles.length + files.length > 10) {
+  //     alert("You can only upload up to 10 files.");
+  //     return;
+  //   }
+
+  //   // Update Formik value
+  //   formik.setFieldValue("evidence", [...selectedFiles, ...files]);
+  //   setSelectedFiles((prevFiles) => [...prevFiles, ...files]);
+
+  //   // Generate image previews
+  //   const newImagePreviews = files.map((file) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     return new Promise((resolve) => {
+  //       reader.onloadend = () => resolve(reader.result);
+  //     });
+  //   });
+
+  //   // Add new previews to the existing previews
+  //   Promise.all(newImagePreviews).then((previews) => {
+  //     setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
+  //   });
+  // };
+
+  
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
+    const files = Array.from(e.target.files);
+    addFiles(files);
+  };
+
+  const addFiles = (files) => {
+    // Restrict to a maximum of 10 files
+    if (selectedFiles.length + files.length > 10) {
+      alert("You can only upload up to 10 files.");
+      return;
     }
+
+    formik.setFieldValue("evidence", [...selectedFiles, ...files]);
+    setSelectedFiles((prevFiles) => [...prevFiles, ...files]);
+
+    // Generate image previews
+    const newImagePreviews = files.map((file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      return new Promise((resolve) => {
+        reader.onloadend = () => resolve(reader.result);
+      });
+    });
+
+    Promise.all(newImagePreviews).then((previews) => {
+      setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
+    });
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    addFiles(files);
   };
 
   const handleToTop = () => {
@@ -86,7 +186,11 @@ export default function Report() {
         <h1 className="text-2xl font-semibold text-gray-700 mb-8">
           General info
         </h1>
-        <form className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <form
+          className="grid grid-cols-1 gap-6 md:grid-cols-3"
+          noValidate
+          onSubmit={formik.handleSubmit}
+        >
           {/* Ad Name */}
           <div className="md:col-span-3">
             <label className="block text-sm font-medium text-gray-700">
@@ -95,8 +199,15 @@ export default function Report() {
             <input
               type="text"
               // placeholder="Ad Name"
+              name="adName"
+              value={formik.values.adName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className="mt-3 block w-full p-4 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
+            {formik.touched.adName && formik.errors.adName ? (
+              <p className="text-red-500 text-sm">{formik.errors.adName}</p>
+            ) : null}
           </div>
 
           <div className="" ref={dropdownRef}>
@@ -142,6 +253,9 @@ export default function Report() {
                 </div>
               )}
             </div>
+            {formik.touched.fraudType && formik.errors.fraudType ? (
+              <p className="text-red-500 text-sm">{formik.errors.fraudType}</p>
+            ) : null}
           </div>
 
           {/* Ordered Products */}
@@ -154,9 +268,18 @@ export default function Report() {
             </label>
             <input
               type="text"
+              name="orderedProducts"
+              value={formik.values.orderedProducts}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               // placeholder="Ordered Products"
               className="mt-3 block w-full p-4 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
+            {formik.touched.orderedProducts && formik.errors.orderedProducts ? (
+              <p className="text-red-500 text-sm">
+                {formik.errors.orderedProducts}
+              </p>
+            ) : null}
           </div>
 
           {/* Phone Number */}
@@ -169,9 +292,18 @@ export default function Report() {
             </label>
             <input
               type="text"
+              name="phoneNumber"
+              value={formik.values.phoneNumber}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               placeholder="Fraud's Phone Number"
               className="mt-3 block w-full p-4 border placeholder-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
+            {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+              <p className="text-red-500 text-sm">
+                {formik.errors.phoneNumber}
+              </p>
+            ) : null}
           </div>
 
           {/* Website Link */}
@@ -185,8 +317,17 @@ export default function Report() {
             <input
               type="url"
               // placeholder="Website Link"
+              name="websiteLink"
+              value={formik.values.websiteLink}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className="mt-3 block w-full p-4 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
+            {formik.touched.websiteLink && formik.errors.websiteLink ? (
+              <p className="text-red-500 text-sm">
+                {formik.errors.websiteLink}
+              </p>
+            ) : null}
           </div>
 
           {/* Social Media Link */}
@@ -199,9 +340,18 @@ export default function Report() {
             </label>
             <input
               type="url"
+              name="socialMediaLink"
+              value={formik.values.socialMediaLink}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               // placeholder="Social Media Link"
               className="mt-3 block w-full p-4 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
+            {formik.touched.socialMediaLink && formik.errors.socialMediaLink ? (
+              <p className="text-red-500 text-sm">
+                {formik.errors.socialMediaLink}
+              </p>
+            ) : null}
           </div>
         </form>
         <div className="w-full mt-10 h-full">
@@ -209,7 +359,7 @@ export default function Report() {
             Description
           </h3>
           <ReactQuill
-            value={description}
+            value={formik.values.description}
             onChange={handleDescriptionChange}
             className="bg-white  h-[250px]"
             theme="snow"
@@ -226,41 +376,107 @@ export default function Report() {
             </span>
           </h3>
           <div className="max-w-5xl mx-auto  mt-6">
-            <div className="border-2 p-3 rounded-lg">
+            {/* <div className="border-2 p-3 rounded-lg">
               <label
                 htmlFor="file-upload"
-                className="border-2 border-dashed border-gray-300 rounded-lg h-48 flex flex-col justify-center items-center cursor-pointer"
+                className={`border-2 border-dashed border-gray-300 rounded-lg h-full py-8 flex flex-col justify-center ${
+                  imagePreview ? "items-start" : "items-center"
+                }  justify-center cursor-pointer`}
               >
                 <input
                   id="file-upload"
                   type="file"
                   onChange={handleFileChange}
                   className="hidden"
+                  multiple
                 />
                 <div className="text-center">
-                  <FaRegFile className="mx-auto text-4xl text-gray-600" />
-                  <p className="mt-2 text-sm text-gray-600">
-                    {selectedFile ? (
-                      selectedFile.name
-                    ) : (
-                      <span className="text-lg ">
-                        <span className="text-blue-500">Choose images</span> or
-                        drag it here
-                      </span>
-                    )}
-                  </p>
+                  {imagePreviews.length > 0 ? (
+                    <div className="w-full overflow-x-auto">
+                      <div className="grid  sm:grid-cols-2 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {imagePreviews.map((item, index) => (
+                          <div key={index} className="flex-shrink-0">
+                            <img
+                              src={item}
+                              alt="Preview"
+                              className="h-[150px] w-[200px] "
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <FaRegFile className="mx-auto text-4xl text-gray-600" />
+                      <p className="mt-2 text-sm text-gray-600">
+                        <span className="text-lg ">
+                          <span className="text-blue-500">Choose images</span>{" "}
+                          or drag it here
+                        </span>
+                      </p>
+                    </>
+                  )}
                 </div>
               </label>
-            </div>
+            </div> */}
+             <div
+            className={`border-2 p-3 rounded-lg ${
+              isDragging ? "bg-gray-100 border-blue-500" : ""
+            }`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <label
+              htmlFor="file-upload"
+              className={`border-2 border-dashed border-gray-300 rounded-lg h-full py-10 flex flex-col justify-center ${
+                imagePreviews.length ? "items-center" : "items-center"
+              } cursor-pointer`}
+            >
+              <input
+                id="file-upload"
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+                multiple
+              />
+              <div className="text-center">
+                {imagePreviews.length > 0 ? (
+                  <div className="w-full overflow-x-auto ">
+                    <div className="grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                      {imagePreviews.map((item, index) => (
+                        <div key={index} className="flex-shrink-0">
+                          <img
+                            src={item}
+                            alt="Preview"
+                            className="h-[150px] w-[200px]"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <FaRegFile className="mx-auto text-4xl text-gray-600" />
+                    <p className="mt-2 text-sm text-gray-600">
+                      <span className="text-lg">
+                        <span className="text-blue-500">Choose images</span> or
+                        drag them here
+                      </span>
+                    </p>
+                  </>
+                )}
+              </div>
+            </label>
+          </div>
 
             {/* Submit Button */}
             <div className="flex justify-end my-10">
-              <Link
-                to={"/report/"}
-                className=" bg-[#537cd9] font-semibold text-lg text-white rounded w-fit"
-              >
-                <button className="py-3 px-6">Repost Fraud +</button>
-              </Link>
+              <div className=" bg-[#537cd9] font-semibold text-lg text-white rounded w-fit">
+                <button className="py-3 px-6" type="submit">
+                  Repost Fraud +
+                </button>
+              </div>
             </div>
           </div>
         </div>

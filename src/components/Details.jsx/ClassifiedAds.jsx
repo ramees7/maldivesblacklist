@@ -264,12 +264,14 @@ export default function ClassifiedAds({ allData, searchTerm }) {
         <h2 className=" ">
           {selectedType === "Any" ? "Classified Ads" : selectedType}
         </h2>
-        {locationPath !== "all" && (
+        {selectedType === "Any" ? (
+          ""
+        ) : (
           <button
             onClick={handleClose}
             className="p-1 bg-white rounded-full text-[#537cd9]"
           >
-            <FaXmark />
+            {<FaXmark />}
           </button>
         )}
       </div>

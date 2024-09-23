@@ -24,6 +24,7 @@
     "react-quill": "^2.0.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.26.1",
+    "rich-text-editor": "^7.3.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {

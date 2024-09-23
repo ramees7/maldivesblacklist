@@ -31,8 +31,6 @@ export default function HomeLanding() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform any action with searchTerm, like navigation or fetching data
-    // console.log("Submitted search term:", searchTerm);
     navigate(`/ads/all?${searchTerm}/`)
   };
 
