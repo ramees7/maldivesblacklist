@@ -138,9 +138,9 @@ export default function Navbar() {
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUAKAoF1k1skFGMQtlbpX1COWUuggl8SYVQw&s"
                   alt="profile"
-                  className="w-[50px] h-[50px] rounded-full"
+                  className="w-[50px] h-[50px] rounded-full "
                 />
-                <h1>{truncateText("ghjbknsldh hjcksdcb jsdjbk", 10)}</h1>
+                <h1 className="font-bold text-lg">{truncateText("ghjbknsldh hjcksdcb jsdjbk", 10)}</h1>
               </div>
             </div>
           ) : (

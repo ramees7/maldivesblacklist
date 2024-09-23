@@ -14,6 +14,7 @@ import AdsOverview from "../pages/AdsOverview";
 import PostedUser from "../pages/PostedUser";
 import ErrorBoundary from "./ErrorBoundary";
 import Compare from "../pages/Compare";
+import Panel from "../pages/Panel";
 
 export default function LayoutRoutes() {
   const [showHeaderNav, setShowHeaderNav] = useState(true);
@@ -63,6 +64,7 @@ export default function LayoutRoutes() {
             <Route path={`/ads/:title/:name/`} element={<AdsOverview />} />
             <Route path={`/user/:name/`} element={<PostedUser />} />
             <Route path={`/compare/`} element={<Compare />} />
+            <Route path={`/panel/:title/`} element={<Panel />} />
             <Route path="/*" element={<Navigate to="/" replace />} />
             {/* <Route path="/*" element={<Navigate to="/" replace />} />   add a new page and content is page npt found 404  */}
           </Routes>
