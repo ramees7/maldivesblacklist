@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
   const sidebarRef = useRef(null);
 
   const toggleSidebar = () => {
@@ -17,13 +17,6 @@ export default function Navbar() {
     if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
       setSidebarOpen(false);
     }
-  };
-
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
   };
 
   useEffect(() => {
@@ -70,7 +63,7 @@ export default function Navbar() {
       >
         <div className="flex justify-around py-5 ">
           <div className="py-3 px-4 bg-[#537cd9] font-semibold text-lg text-white rounded">
-            <Link to={"/report/"}>
+            <Link to={`${!isLogged ? "/panel/create/" : "/report/"}`}>
               <button className="py-2 px-4">Repost Fraud +</button>
             </Link>
           </div>
@@ -133,14 +126,16 @@ export default function Navbar() {
         {/* Right side: Login, Register, and Repost Button */}
         <div className="lg:col-span-6 col-span-3 flex justify-end items-center">
           {!isLogged ? (
-            <div className="lg:flex lg:w-[50%] xl:w-[60%] flex justify-center">
+            <div className="lg:flex lg:w-[50%] xl:w-[60%] flex justify-center px-5">
               <div className="flex items-center gap-x-4">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUAKAoF1k1skFGMQtlbpX1COWUuggl8SYVQw&s"
                   alt="profile"
-                  className="w-[50px] h-[50px] rounded-full "
+                  className="w-[50px] h-[50px]  rounded-full "
                 />
-                <h1 className="font-bold text-lg">{truncateText("ghjbknsldh hjcksdcb jsdjbk", 10)}</h1>
+                <h1 className="font-bold text-lg md:block hidden truncate">
+                  bcjnsdcnsdc ncsdnc
+                </h1>
               </div>
             </div>
           ) : (
@@ -164,8 +159,8 @@ export default function Navbar() {
           )}
 
           <div className=" bg-[#537cd9] font-semibold text-lg text-white rounded hidden lg:block">
-            <Link to={"/report/"}>
-              <button className="py-3 xl:px-6 lg:px-3">Repost Fraud +</button>
+            <Link to={`${!isLogged ? "/panel/create/" : "/report/"}`}>
+              <button className="py-3 xl:px-5 lg:px-3">Repost Fraud +</button>
             </Link>
           </div>
           <div className={`block lg:hidden ${!isLogged ? "hidden" : "block"}`}>

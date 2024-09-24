@@ -9,7 +9,7 @@ import { fraudListsContext } from "../Context/ContextShares";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-export default function Report() {
+export default function Report({ isLogged }) {
   const [description, setDescription] = useState("");
   const { fraudLists, setFraudLists } = useContext(fraudListsContext);
   const [selectedFiles, setSelectedFiles] = useState([]); // For multiple files
@@ -19,7 +19,7 @@ export default function Report() {
   const [selectedOption, setSelectedOption] = useState("Fraud Types");
   const [imagePreview, setImagePreview] = useState(null);
   const dropdownRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false)
+  const [isDragging, setIsDragging] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -78,35 +78,6 @@ export default function Report() {
     };
   }, []);
 
-  // const handleFileChange = (e) => {
-  //   const files = Array.from(e.target.files);
-
-  //   // Restrict to a maximum of 10 files
-  //   if (selectedFiles.length + files.length > 10) {
-  //     alert("You can only upload up to 10 files.");
-  //     return;
-  //   }
-
-  //   // Update Formik value
-  //   formik.setFieldValue("evidence", [...selectedFiles, ...files]);
-  //   setSelectedFiles((prevFiles) => [...prevFiles, ...files]);
-
-  //   // Generate image previews
-  //   const newImagePreviews = files.map((file) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     return new Promise((resolve) => {
-  //       reader.onloadend = () => resolve(reader.result);
-  //     });
-  //   });
-
-  //   // Add new previews to the existing previews
-  //   Promise.all(newImagePreviews).then((previews) => {
-  //     setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
-  //   });
-  // };
-
-  
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     addFiles(files);
@@ -164,23 +135,44 @@ export default function Report() {
     handleToTop();
   }, []);
   return (
-    <div className="xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] py-20">
-      <h1 className="text-4xl font-semibold mb-8 text-gray-700">
-        Post Your Ad
-      </h1>
-      <div className="border-dotted border-2 border-gray-400 rounded-lg py-7 text-center mb-10">
-        <h1 className="text-lg font-semibold">
-          You can also{" "}
-          <Link to={"/login/"} className="text-blue-600">
-            Log In
-          </Link>{" "}
-          or{" "}
-          <Link to={"/register/"} className="text-blue-600">
-            Register
-          </Link>{" "}
-          first.
-        </h1>
-      </div>
+    <div
+      className={`${
+        isLogged
+          ? "py-10"
+          : " xl:px-48 lg:px-20 md:px-12 px-10 bg-[#f2f2f2] py-20"
+      }`}
+    >
+      {!isLogged ? (
+        <div className="flex justify-between w-full items-center mb-8">
+          <h1 className="md:text-4xl text-3xl font-semibold  text-gray-700">
+            Post Your Ad
+          </h1>
+          <div className=" bg-[#537cd9] font-semibold text-lg text-white rounded ">
+            <Link to={"/package/"}>
+              <button className="py-3 px-6 ">Package</button>
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <>
+          <h1 className="text-4xl font-semibold mb-8 text-gray-700">
+            Post Your Ad
+          </h1>
+          <div className="border-dotted border-2 border-gray-400 rounded-lg py-7 text-center mb-10">
+            <h1 className="text-lg font-semibold">
+              You can also{" "}
+              <Link to={"/login/"} className="text-blue-600">
+                Log In
+              </Link>{" "}
+              or{" "}
+              <Link to={"/register/"} className="text-blue-600">
+                Register
+              </Link>{" "}
+              first.
+            </h1>
+          </div>
+        </>
+      )}
 
       <div className="w-full mx-auto bg-white lg:p-16 p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold text-gray-700 mb-8">
@@ -191,7 +183,6 @@ export default function Report() {
           noValidate
           onSubmit={formik.handleSubmit}
         >
-          {/* Ad Name */}
           <div className="md:col-span-3">
             <label className="block text-sm font-medium text-gray-700">
               Ad Name <span className="text-red-500">*</span>
@@ -376,12 +367,19 @@ export default function Report() {
             </span>
           </h3>
           <div className="max-w-5xl mx-auto  mt-6">
-            {/* <div className="border-2 p-3 rounded-lg">
+            <div
+              className={`border-2 p-3 rounded-lg ${
+                isDragging ? "bg-gray-100 border-blue-500" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               <label
                 htmlFor="file-upload"
-                className={`border-2 border-dashed border-gray-300 rounded-lg h-full py-8 flex flex-col justify-center ${
-                  imagePreview ? "items-start" : "items-center"
-                }  justify-center cursor-pointer`}
+                className={`border-2 border-dashed border-gray-300 rounded-lg h-full py-10 flex flex-col justify-center ${
+                  imagePreviews.length ? "items-center" : "items-center"
+                } cursor-pointer`}
               >
                 <input
                   id="file-upload"
@@ -392,14 +390,14 @@ export default function Report() {
                 />
                 <div className="text-center">
                   {imagePreviews.length > 0 ? (
-                    <div className="w-full overflow-x-auto">
-                      <div className="grid  sm:grid-cols-2 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    <div className="w-full overflow-x-auto ">
+                      <div className="grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
                         {imagePreviews.map((item, index) => (
                           <div key={index} className="flex-shrink-0">
                             <img
                               src={item}
                               alt="Preview"
-                              className="h-[150px] w-[200px] "
+                              className="h-[150px] w-[200px]"
                             />
                           </div>
                         ))}
@@ -409,66 +407,16 @@ export default function Report() {
                     <>
                       <FaRegFile className="mx-auto text-4xl text-gray-600" />
                       <p className="mt-2 text-sm text-gray-600">
-                        <span className="text-lg ">
+                        <span className="text-lg">
                           <span className="text-blue-500">Choose images</span>{" "}
-                          or drag it here
+                          or drag them here
                         </span>
                       </p>
                     </>
                   )}
                 </div>
               </label>
-            </div> */}
-             <div
-            className={`border-2 p-3 rounded-lg ${
-              isDragging ? "bg-gray-100 border-blue-500" : ""
-            }`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <label
-              htmlFor="file-upload"
-              className={`border-2 border-dashed border-gray-300 rounded-lg h-full py-10 flex flex-col justify-center ${
-                imagePreviews.length ? "items-center" : "items-center"
-              } cursor-pointer`}
-            >
-              <input
-                id="file-upload"
-                type="file"
-                onChange={handleFileChange}
-                className="hidden"
-                multiple
-              />
-              <div className="text-center">
-                {imagePreviews.length > 0 ? (
-                  <div className="w-full overflow-x-auto ">
-                    <div className="grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                      {imagePreviews.map((item, index) => (
-                        <div key={index} className="flex-shrink-0">
-                          <img
-                            src={item}
-                            alt="Preview"
-                            className="h-[150px] w-[200px]"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <FaRegFile className="mx-auto text-4xl text-gray-600" />
-                    <p className="mt-2 text-sm text-gray-600">
-                      <span className="text-lg">
-                        <span className="text-blue-500">Choose images</span> or
-                        drag them here
-                      </span>
-                    </p>
-                  </>
-                )}
-              </div>
-            </label>
-          </div>
+            </div>
 
             {/* Submit Button */}
             <div className="flex justify-end my-10">

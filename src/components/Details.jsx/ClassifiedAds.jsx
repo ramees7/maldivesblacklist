@@ -179,6 +179,22 @@ export default function ClassifiedAds({ allData, searchTerm }) {
       localStorage.setItem("CompareData", JSON.stringify(compareData));
     }
   }, [compareData]);
+  useEffect(() => {
+    const handleResize = () => {
+      const isMdOrSmaller = window.innerWidth <= 768; // Tailwind's md breakpoint is 768px
+      if (isMdOrSmaller) {
+        setIsGridView(true); // Always switch to grid view on smaller screens
+      }
+    };
+  
+    handleResize(); // Run the logic on initial load
+  
+    window.addEventListener("resize", handleResize);
+  
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="md:ps-8 min-h-screen pb-20">
@@ -304,7 +320,7 @@ export default function ClassifiedAds({ allData, searchTerm }) {
                 <Link
                   to={`/ads/${item.typeOfFraud}/${item.title}/`}
                   className={`${
-                    isGridView ? "" : "flex items-center"
+                    isGridView ? "" : "flex items-center w-full"
                   } cursor-pointer`}
                 >
                   <div className="relative">
