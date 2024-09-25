@@ -1,45 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Report from "./Report";
-import './Panel.css'
+import "./Panel.css";
 import MyAds from "../components/Panel/MyAds";
 import Favourites from "../components/Panel/Favourites";
 import Messages from "../components/Panel/Messages";
 import Settings from "../components/Panel/Settings";
 import MyOrders from "../components/Panel/MyOrders";
+import Package from "../components/Panel/Package";
+import { loggedNavigationListContext } from "../Context/ContextShares";
 
 export default function Panel() {
   const location = useLocation();
   const navigate = useNavigate();
-  const navigationData = [
-    {
-      title: "Ad New",
-      link: "create",
-    },
-    {
-      title: "My Ads",
-      link: "list",
-    },
-    {
-      title: "Favourites",
-      link: "favourites",
-    },
-    {
-      title: "Messages",
-      link: "messages",
-    },
-    {
-      title: "My Orders",
-      link: "myorders",
-    },
-    {
-      title: "Settings",
-      link: "settings",
-    },
-  ];
+  const { loggedNavigationList, setLoggedNavigationList } =
+    useContext(loggedNavigationListContext);
 
   useEffect(() => {
-    const isValidPath = navigationData.some(
+    const isValidPath = loggedNavigationList.some(
       (item) => `/panel/${item.link}/` === location.pathname
     );
 
@@ -51,7 +29,7 @@ export default function Panel() {
   return (
     <div className="">
       <div className="flex gap-x-8 py-10 text-lg xl:px-48 lg:px-20 md:px-12 px-10  bg-white overflow-y-scroll">
-        {navigationData.map((item) => (
+        {loggedNavigationList.map((item) => (
           <Link
             to={`/panel/${item.link}/`}
             key={item.title}
@@ -67,11 +45,12 @@ export default function Panel() {
       </div>
       <div className="bg-[#f2f2f2] xl:px-48 lg:px-20 md:px-12 px-10">
         {location.pathname === "/panel/create/" && <Report isLogged={true} />}
-        {location.pathname === "/panel/list/" && <MyAds/>}
-        {location.pathname === "/panel/favourites/" && <Favourites/>}
-        {location.pathname === "/panel/messages/" && <Messages/>}
-        {location.pathname === "/panel/myorders/" && <MyOrders/>}
-        {location.pathname === "/panel/settings/" && <Settings/>}
+        {location.pathname === "/panel/list/" && <MyAds />}
+        {location.pathname === "/panel/favourites/" && <Favourites />}
+        {location.pathname === "/panel/messages/" && <Messages />}
+        {location.pathname === "/panel/myorders/" && <MyOrders />}
+        {location.pathname === "/panel/settings/" && <Settings />}
+        {location.pathname === "/panel/package/" && <Package />}
       </div>
     </div>
   );

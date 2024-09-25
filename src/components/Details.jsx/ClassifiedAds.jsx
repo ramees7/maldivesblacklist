@@ -66,8 +66,8 @@ export default function ClassifiedAds({ allData, searchTerm }) {
       );
     }
     setFilteredFraudData(sortedData);
-    // }, [ sortOption,filteredFraudData]);
-  }, [sortOption]);
+  }, [sortOption, filteredFraudData]);
+  // }, [sortOption]);
 
   useEffect(() => {
     if (adsChanging) {
@@ -78,35 +78,42 @@ export default function ClassifiedAds({ allData, searchTerm }) {
           filteredData.some((fd) => fd.title === item.typeOfFraud)
         );
         setFilteredFraudData(filtered);
-      } else {
-        setFilteredFraudData([]);
+      } else if (allData.length > 0) {
+        setFilteredFraudData(allData); // Fallback to allData if filteredData is empty
       }
     }
-  }, [filteredData, adsChanging, location]);
+  }, [filteredData, adsChanging, location, allData]); // Add `allData` to ensure it's used when needed
+
+  useEffect(() => {
+    if (filteredFraudData.length === 0 && allData.length > 0) {
+      setFilteredFraudData([]);
+    }
+  }, [filteredFraudData, allData]);
 
   useEffect(() => {
     if (searchTerm) {
       const filtered = allData.filter((item) =>
         item.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
-
       setFilteredFraudData(filtered);
     } else if (homeSearchTerm) {
       const filtered = allData.filter((item) =>
         item.title.toLowerCase().includes(homeSearchTerm.toLowerCase())
       );
       setFilteredFraudData(filtered);
-    } else {
-      setFilteredFraudData(allData);
+    } else if (allData.length > 0) {
+      setFilteredFraudData(allData); // Fallback if no search term is present
     }
   }, [searchTerm, allData, homeSearchTerm]);
 
   const resultsCount = filteredFraudData.length;
 
+  
   const handleClose = () => {
     navigate("/ads/all/");
     setSelectedType("");
   };
+  
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -118,16 +125,20 @@ export default function ClassifiedAds({ allData, searchTerm }) {
   const totalPages = Math.ceil(filteredFraudData.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    navigate(`?page=${pageNumber}/`);
+    if (!filteredFraudData.length) return; // Prevent navigation if there's no data
+
+    if (pageNumber !== currentPage) {
+      setCurrentPage(pageNumber);
+      navigate(`?page=${pageNumber}`);
+    }
   };
 
   useEffect(() => {
-    const page = parseInt(searchParams.get("page"), 10);
-    if (page && page !== currentPage) {
-      setCurrentPage(page);
+    // const page = parseInt(searchParams.get("page"), 10) || 1;
+    if (pageFromURL !== currentPage) {
+      setCurrentPage(pageFromURL);
     }
-  }, [location.search]);
+  }, [location.search, pageFromURL]);
 
   const canvasRef = useRef(null);
 
@@ -186,11 +197,11 @@ export default function ClassifiedAds({ allData, searchTerm }) {
         setIsGridView(true); // Always switch to grid view on smaller screens
       }
     };
-  
+
     handleResize(); // Run the logic on initial load
-  
+
     window.addEventListener("resize", handleResize);
-  
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };

@@ -114,13 +114,14 @@ export default function HomeLanding() {
                           to={`/ads/${option.link}`}
                           className="flex justify-between items-center cursor-pointer my-2 hover:text-green-500"
                           key={index}
+                          
                         >
-                          <li
+                          <button disabled={option.disabled}
                             className="px-4 py-2   text-start"
                             onClick={() => handleOptionClick(option.title)}
                           >
                             {option.title}
-                          </li>
+                          </button>
                           <h4 className="w-[25px] h-[25px] rounded-full bg-[#537cd9] font-semibold text-white">
                             {option.count}
                           </h4>

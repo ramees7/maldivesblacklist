@@ -1,13 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { LuUser } from "react-icons/lu";
 import { AiOutlineMenu } from "react-icons/ai";
 import { HiOutlineXMark } from "react-icons/hi2";
 import { Link } from "react-router-dom";
+import { loggedNavigationListContext } from "../Context/ContextShares";
+import { IoIosAddCircleOutline, IoIosLogOut } from "react-icons/io";
 
 export default function Navbar() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(false);
   const sidebarRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const { loggedNavigationList, setLoggedNavigationList } = useContext(
+    loggedNavigationListContext
+  );
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -49,6 +55,7 @@ export default function Navbar() {
       link: "/faq",
     },
   ];
+
   return (
     <div className="relative">
       {" "}
@@ -126,17 +133,53 @@ export default function Navbar() {
         {/* Right side: Login, Register, and Repost Button */}
         <div className="lg:col-span-6 col-span-3 flex justify-end items-center">
           {!isLogged ? (
-            <div className="lg:flex lg:w-[50%] xl:w-[60%] flex justify-center px-5">
-              <div className="flex items-center gap-x-4">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUAKAoF1k1skFGMQtlbpX1COWUuggl8SYVQw&s"
-                  alt="profile"
-                  className="w-[50px] h-[50px]  rounded-full "
-                />
-                <h1 className="font-bold text-lg md:block hidden truncate">
-                  bcjnsdcnsdc ncsdnc
-                </h1>
+            <div
+              className="relative"
+              onMouseEnter={() => setIsOpen(true)}
+              onMouseLeave={() => setIsOpen(false)}
+            >
+              {/* Profile image and name */}
+              <div className="lg:flex lg:w-[50%] xl:w-[60%] flex justify-center px-5">
+                <div className="flex items-center gap-x-4 cursor-pointer">
+                  <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
+                    <img
+                      src="https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg"
+                      alt="profile"
+                      className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-125"
+                    />
+                  </div>
+                  <h1 className="font-bold text-lg md:block hidden truncate">
+                    Muhammed R...
+                  </h1>
+                </div>
               </div>
+
+              {/* Dropdown menu */}
+              {isOpen && (
+                <div className="absolute top-full  w-[250px]  right-0 py-5 bg-white rounded-lg shadow-lg  z-10">
+                  {loggedNavigationList?.map((item) => (
+                    <Link
+                      to={`/panel/${item.link}/`}
+                      key={item.title}
+                      className="flex items-center justify-between py-3 px-5 text-lg hover:bg-slate-100"
+                    >
+                      <div className="flex items-center gap-x-5 font-bold text-lg">
+                        <span className="font-bold text-2xl">{item.icon}</span>
+                        <h1>{item.title}</h1>
+                      </div>
+                      <h4 className="w-[25px] h-[25px] rounded-full bg-yellow-500  font-semibold text-black flex justify-center items-center">
+                        2
+                      </h4>
+                    </Link>
+                  ))}
+                  <div className="flex items-center justify-start py-3 px-5 font-bold gap-x-5 hover:bg-slate-100 text-lg">
+                    <span className="font-bold text-2xl">
+                      <IoIosLogOut />
+                    </span>
+                    <h1>Logout</h1>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="hidden lg:flex lg:w-[50%] xl:w-[60%] justify-around text-lg font-bold">

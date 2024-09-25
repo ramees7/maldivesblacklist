@@ -10,7 +10,7 @@ export default function Messages() {
           Messages
         </h1>
         <div className=" bg-[#537cd9] font-semibold text-lg text-white rounded ">
-          <Link to={"/package/"}>
+          <Link to={"/panel/package/"}>
             <button className="py-3 px-6 ">By the Package</button>
           </Link>
         </div>

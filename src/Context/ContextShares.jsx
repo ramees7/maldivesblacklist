@@ -1,11 +1,13 @@
 import React, { createContext, useState } from "react";
-import { FaFacebook } from "react-icons/fa";
+import { FaFacebook, FaRegFileAlt } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
-import { IoMdHome } from "react-icons/io";
+import { IoIosAddCircleOutline, IoMdHome, IoMdSettings } from "react-icons/io";
 import { GiRobber } from "react-icons/gi";
 import { FaRegEye } from "react-icons/fa";
 import { CgMoreO } from "react-icons/cg";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { FiMessageSquare } from "react-icons/fi";
+import { CiHeart, CiViewList } from "react-icons/ci";
 
 export const adsChangingContext = createContext();
 export const discoverDataContext = createContext();
@@ -13,6 +15,7 @@ export const selectedTypeContext = createContext();
 export const selectedFraudDetailContext = createContext();
 export const compareDataContext = createContext();
 export const fraudListsContext = createContext();
+export const loggedNavigationListContext = createContext();
 
 export default function ContextShares({ children }) {
   const [adsChanging, setAdsChanging] = useState("");
@@ -117,7 +120,7 @@ export default function ContextShares({ children }) {
       description: "Scammer requested IMF code for fake transaction.",
       views: 20,
       dateOfPosted: "2024-02-19",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "F Commerce Fraud",
       detailedDescription: "Transaction fraud involving fake IMF code.",
       reportedUser: "gopika",
       userCurrentStatus: "",
@@ -134,7 +137,7 @@ export default function ContextShares({ children }) {
       description: "IMF code requested for fraud.",
       views: 20,
       dateOfPosted: "2020-09-19",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "E Commerce Fraud",
       detailedDescription: "Fake transaction requiring IMF code.",
       reportedUser: "sidharth",
       userCurrentStatus: "",
@@ -151,7 +154,7 @@ export default function ContextShares({ children }) {
       description: "Fraudulent request for IMF code.",
       views: 20,
       dateOfPosted: "2024-04-19",
-      typeOfFraud: "Scammer",
+      typeOfFraud: "",
       detailedDescription: "IMF code fraud encountered.",
       reportedUser: "ramees",
       userCurrentStatus: "",
@@ -169,7 +172,7 @@ export default function ContextShares({ children }) {
       description: "Beware of fraudulent sellers offering fake products.",
       views: 34,
       dateOfPosted: "2024-09-19",
-      typeOfFraud: "Shop Fraud",
+      typeOfFraud: "E Commerce Fraud",
       detailedDescription:
         "The seller took my money and delivered fake products.",
       reportedUser: "jithin",
@@ -206,7 +209,7 @@ export default function ContextShares({ children }) {
       description: "This fake charity took donations and disappeared.",
       views: 58,
       dateOfPosted: "2024-09-19",
-      typeOfFraud: "Fake Charity",
+      typeOfFraud: "Shop Fraud",
       detailedDescription:
         "They pretended to collect money for disaster relief.",
       reportedUser: "rashid",
@@ -225,7 +228,7 @@ export default function ContextShares({ children }) {
         "Beware of this scam asking for credit card details over email.",
       views: 150,
       dateOfPosted: "2024-09-19",
-      typeOfFraud: "Phishing",
+      typeOfFraud: "Shop Fraud",
       detailedDescription:
         "They pretend to be from the bank and ask for card details.",
       reportedUser: "ramees",
@@ -244,7 +247,7 @@ export default function ContextShares({ children }) {
         "Ordered an item but never received it, and the seller vanished.",
       views: 43,
       dateOfPosted: "2024-09-19",
-      typeOfFraud: "E-Commerce-Fraud",
+      typeOfFraud: "E Commerce Fraud",
       detailedDescription: "The seller stopped responding after payment.",
       reportedUser: "ramees",
       userCurrentStatus: "",
@@ -261,7 +264,7 @@ export default function ContextShares({ children }) {
       description: "Lost money to a fraudulent investment scheme.",
       views: 210,
       dateOfPosted: "2024-09-19",
-      typeOfFraud: "Investment Fraud",
+      typeOfFraud: "Shop Fraud",
       detailedDescription:
         "Promised high returns but disappeared after taking the money.",
       reportedUser: "ramees",
@@ -291,12 +294,12 @@ export default function ContextShares({ children }) {
 
   const lists = [
     {
-      title: "E-Commerce-Fraud",
+      title: "E Commerce Fraud",
       link: "e-commerce-fraud",
       icon: <MdOutlineShoppingCart />,
     },
     {
-      title: "F-Commerce-Fraud",
+      title: "F Commerce Fraud",
       link: "f-commerce-fraud",
       icon: <FaFacebook />,
     },
@@ -327,13 +330,53 @@ export default function ContextShares({ children }) {
     },
   ];
 
-  const updatedLists = lists.map((listItem) => ({
-    ...listItem,
-    count: dicoverDataAll.filter((item) => item.typeOfFraud === listItem.title)
-      .length,
-  }));
+  const LoggedNavigationData = [
+    {
+      title: "Ad New",
+      link: "create",
+      icon: <IoIosAddCircleOutline />,
+    },
+    {
+      title: "My Ads",
+      link: "list",
+      icon: <FaRegFileAlt />,
+    },
+    {
+      title: "Favourites",
+      link: "favourites",
+      icon: <CiHeart />,
+    },
+    {
+      title: "Messages",
+      link: "messages",
+      icon: <FiMessageSquare />,
+    },
+    {
+      title: "My Orders",
+      link: "myorders",
+      icon: <CiViewList />,
+    },
+    {
+      title: "Settings",
+      link: "settings",
+      icon: <IoMdSettings />,
+    },
+  ];
+
+  const updatedLists = lists.map((listItem) => {
+    const count = dicoverDataAll.filter(
+      (item) => item.typeOfFraud === listItem.title
+    ).length;
+    return {
+      ...listItem,
+      count, // Add the count
+      disabled: count === 0, // Add the disable key based on count
+    };
+  });
   const [fraudLists, setFraudLists] = useState(updatedLists);
   const [discoverData, setDiscoverData] = useState(dicoverDataAll);
+  const [loggedNavigationList, setLoggedNavigationList] =
+    useState(LoggedNavigationData);
 
   return (
     <div>
@@ -351,7 +394,11 @@ export default function ContextShares({ children }) {
                 <fraudListsContext.Provider
                   value={{ fraudLists, setFraudLists }}
                 >
-                  {children}
+                  <loggedNavigationListContext.Provider
+                    value={{ loggedNavigationList, setLoggedNavigationList }}
+                  >
+                    {children}
+                  </loggedNavigationListContext.Provider>
                 </fraudListsContext.Provider>
               </selectedFraudDetailContext.Provider>
             </compareDataContext.Provider>
