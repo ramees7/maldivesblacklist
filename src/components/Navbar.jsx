@@ -156,23 +156,25 @@ export default function Navbar() {
 
               {/* Dropdown menu */}
               {isOpen && (
-                <div className="absolute top-full  w-[250px]  right-0 py-5 bg-white rounded-lg shadow-lg  z-10">
+                <div className="absolute top-full  w-[250px]  right-0 pt-5 bg-white rounded-lg shadow-lg  z-10">
                   {loggedNavigationList?.map((item) => (
                     <Link
                       to={`/panel/${item.link}/`}
-                      key={item.title}
+                      key={item.link}
                       className="flex items-center justify-between py-3 px-5 text-lg hover:bg-slate-100"
                     >
                       <div className="flex items-center gap-x-5 font-bold text-lg">
                         <span className="font-bold text-2xl">{item.icon}</span>
                         <h1>{item.title}</h1>
                       </div>
-                      <h4 className="w-[25px] h-[25px] rounded-full bg-yellow-500  font-semibold text-black flex justify-center items-center">
-                        2
-                      </h4>
+                      {item.count > 0 && (
+                        <h4 className="w-[25px] h-[25px] rounded-full bg-yellow-500  font-semibold text-black flex justify-center items-center">
+                          {item?.count}
+                        </h4>
+                      )}
                     </Link>
                   ))}
-                  <div className="flex items-center justify-start py-3 px-5 font-bold gap-x-5 hover:bg-slate-100 text-lg">
+                  <div className="flex items-center justify-start py-3 px-5 border-t-2 font-bold gap-x-5 hover:bg-slate-100 text-lg">
                     <span className="font-bold text-2xl">
                       <IoIosLogOut />
                     </span>

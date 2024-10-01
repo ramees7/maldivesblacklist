@@ -15,7 +15,7 @@ export default function MyOrders() {
         />
         <div className="flex justify-center">
           <Link
-            to={"/panel/create/"}
+            to={"/panel/package/"}
             className="bg-yellow-500 w-fit font-semibold text-lg text-white rounded"
           >
             <button

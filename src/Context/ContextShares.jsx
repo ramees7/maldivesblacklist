@@ -340,27 +340,34 @@ export default function ContextShares({ children }) {
       title: "My Ads",
       link: "list",
       icon: <FaRegFileAlt />,
+      count:1
     },
     {
       title: "Favourites",
       link: "favourites",
       icon: <CiHeart />,
+      count:1
     },
     {
       title: "Messages",
       link: "messages",
       icon: <FiMessageSquare />,
+      count:1
     },
     {
       title: "My Orders",
       link: "myorders",
       icon: <CiViewList />,
+      count:1
     },
     {
       title: "Settings",
       link: "settings",
       icon: <IoMdSettings />,
     },
+    {
+      link:"package"
+    }
   ];
 
   const updatedLists = lists.map((listItem) => {

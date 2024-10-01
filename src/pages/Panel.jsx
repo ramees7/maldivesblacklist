@@ -7,8 +7,8 @@ import Favourites from "../components/Panel/Favourites";
 import Messages from "../components/Panel/Messages";
 import Settings from "../components/Panel/Settings";
 import MyOrders from "../components/Panel/MyOrders";
-import Package from "../components/Panel/Package";
 import { loggedNavigationListContext } from "../Context/ContextShares";
+import Packages from "../components/Panel/Packages";
 
 export default function Panel() {
   const location = useLocation();
@@ -21,7 +21,7 @@ export default function Panel() {
       (item) => `/panel/${item.link}/` === location.pathname
     );
 
-    if (!isValidPath) {
+    if (!isValidPath ) {
       navigate("/panel/list/");
     }
   }, [location.pathname, navigate]);
@@ -32,7 +32,7 @@ export default function Panel() {
         {loggedNavigationList.map((item) => (
           <Link
             to={`/panel/${item.link}/`}
-            key={item.title}
+            key={item.link}
             className={`text-gray-700 font-semibold hover:text-[#537cd9] flex: 1 whitespace-nowrap ${
               location.pathname === `/panel/${item.link}/`
                 ? "border-b-4 border-[#537cd9]"
@@ -50,7 +50,7 @@ export default function Panel() {
         {location.pathname === "/panel/messages/" && <Messages />}
         {location.pathname === "/panel/myorders/" && <MyOrders />}
         {location.pathname === "/panel/settings/" && <Settings />}
-        {location.pathname === "/panel/package/" && <Package />}
+        {location.pathname === "/panel/package/" && <Packages />}
       </div>
     </div>
   );
