@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import PhoneInput from "react-phone-input-2";
 
 export default function Checkout() {
   const [openCode, setOpenCode] = useState(false);
+  const [phone, setPhone] = useState("");
 
   const handleCodeOpen = () => {
     if (openCode === true) {
@@ -27,7 +29,7 @@ export default function Checkout() {
             </button>
           </h1>
           {openCode && (
-            <div className="bg-white">
+            <div className="bg-white mt-8 rounded-lg">
               <form className="p-8 flex gap-x-4">
                 <input
                   type="text"
@@ -45,15 +47,16 @@ export default function Checkout() {
               </form>
             </div>
           )}
-          <div className="bg-white p-8">
-            <form className=" grid grid-cols-2 gap-8">
+          <div className="bg-white p-8 mt-8  rounded-lg">
+            <form className=" grid grid-cols-2 gap-x-8 gap-y-4">
               {/* Facebook */}
-              <div>
-                <label htmlFor="fb">Facebook</label>
-                <div className="flex items-center col-span-2 lg:col-span-1 mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="firstname" className="font-semibold">
+                  First name *
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
                   <input
-                    type="url"
-                    placeholder="Enter the URL to your Facebook profile"
+                    type="text"
                     id="fb"
                     className="w-full px-4  outline-none "
                   />
@@ -61,13 +64,14 @@ export default function Checkout() {
               </div>
 
               {/* Twitter */}
-              <div>
-                <label htmlFor="twitter">Twitter</label>
-                <div className="flex items-center col-span-2 lg:col-span-1 mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="lastname" className="font-semibold">
+                  Last name
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
                   <input
-                    type="url"
-                    placeholder="Enter the URL to your Twitter profile"
-                    id="twitter"
+                    type="text"
+                    id="lastname"
                     className="w-full px-4  outline-none "
                   />
                 </div>
@@ -75,26 +79,28 @@ export default function Checkout() {
 
               {/* Instagram */}
 
-              <div>
-                <label htmlFor="instagram">Instagram</label>
-                <div className="flex items-center col-span-2 lg:col-span-1 mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="companyname" className="font-semibold">
+                  Company name (optional)
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
                   <input
-                    type="url"
-                    placeholder="Enter the URL to your Instagram profile"
-                    id="instagram"
+                    type="text"
+                    id="companyname"
                     className="w-full px-4  outline-none "
                   />
                 </div>
               </div>
 
               {/* YouTube */}
-              <div>
-                <label htmlFor="youtube">YouTube</label>
-                <div className="flex items-center col-span-2 lg:col-span-1 mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="country" className="font-semibold">
+                  Country / Region
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
                   <input
-                    type="url"
-                    placeholder="Enter the URL to your YouTube profile"
-                    id="youtube"
+                    type="text"
+                    id="country"
                     className="w-full px-4  outline-none "
                   />
                 </div>
@@ -102,13 +108,103 @@ export default function Checkout() {
 
               {/* LinkedIn */}
 
-              <div>
-                <label htmlFor="linkedin">LinkedIn</label>
-                <div className="flex items-center col-span-2 lg:col-span-1 mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="streetaddress" className="font-semibold">
+                  Street address
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
                   <input
-                    type="url"
-                    placeholder="Enter the URL to your LinkedIn profile"
-                    id="linkedin"
+                    type="text"
+                    placeholder="House number and street name"
+                    id="streetaddress"
+                    className="w-full px-4  outline-none "
+                  />
+                </div>
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="apartment" className="font-semibold">
+                  (optional)
+                </label>
+                <br />
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+                  <input
+                    type="text"
+                    placeholder="Apartment,suit,unit,etc(optional)"
+                    id="apartment"
+                    className="w-full px-4  outline-none "
+                  />
+                </div>
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="town" className="font-semibold">
+                  Town / City
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+                  <input
+                    type="text"
+                    id="town"
+                    className="w-full px-4  outline-none "
+                  />
+                </div>
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="district" className="font-semibold">
+                  District
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+                  <input
+                    type="text"
+                    id="district"
+                    className="w-full px-4  outline-none "
+                  />
+                </div>
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="postcode" className="font-semibold">
+                  Postcode / ZIP (optional)
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+                  <input
+                    type="text"
+                    id="postcode"
+                    className="w-full px-4  outline-none "
+                  />
+                </div>
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="phone" className="font-semibold">
+                  Phone
+                </label>
+                <div className="flex items-center  mt-3 bg-white border-gray-300 rounded-lg">
+                  <PhoneInput
+                    country={"mv"}
+                    value={phone}
+                    onChange={setPhone}
+                    className="w-full h-[50px]  text-black bg-transparent rounded-lg border border-gray-300 focus:outline-none focus:ring-0"
+                    inputStyle={{
+                      height: "100%",
+                      width: "100%",
+                      border: "1px solid #dee2e6",
+                    }}
+                    buttonStyle={{
+                      border: "none",
+                      backgroundColor: "transparent",
+                    }}
+                    dropdownStyle={{
+                      maxHeight: "200px",
+                      overflowY: "scroll",
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="col-span-2 lg:col-span-1">
+                <label htmlFor="email" className="font-semibold">
+                  Email address
+                </label>
+                <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
+                  <input
+                    type="text"
+                    id="email"
                     className="w-full px-4  outline-none "
                   />
                 </div>
