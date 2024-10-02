@@ -20,7 +20,7 @@ export default function ProfileImg() {
   };
 
   return (
-    <div className="p-10">
+    <div className="p-10 border-t-2">
       <div className="flex items-center space-x-6 ">
         {/* First Image Slot - Show selected image or empty */}
         {selectedImage && (

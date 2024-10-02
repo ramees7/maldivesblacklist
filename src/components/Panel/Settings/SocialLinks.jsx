@@ -12,7 +12,7 @@ import { TiTick } from "react-icons/ti";
 
 export default function SocialLinks() {
   return (
-    <div className="p-10">
+    <div className="p-10 border-t-2">
       <form className=" grid grid-cols-2 gap-8">
         {/* Facebook */}
         <div>

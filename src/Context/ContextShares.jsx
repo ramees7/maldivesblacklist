@@ -8,6 +8,7 @@ import { CgMoreO } from "react-icons/cg";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { FiMessageSquare } from "react-icons/fi";
 import { CiHeart, CiViewList } from "react-icons/ci";
+import { GoPackage } from "react-icons/go";
 
 export const adsChangingContext = createContext();
 export const discoverDataContext = createContext();
@@ -16,6 +17,7 @@ export const selectedFraudDetailContext = createContext();
 export const compareDataContext = createContext();
 export const fraudListsContext = createContext();
 export const loggedNavigationListContext = createContext();
+export const packageListContext = createContext();
 
 export default function ContextShares({ children }) {
   const [adsChanging, setAdsChanging] = useState("");
@@ -340,25 +342,25 @@ export default function ContextShares({ children }) {
       title: "My Ads",
       link: "list",
       icon: <FaRegFileAlt />,
-      count:1
+      count: 1,
     },
     {
       title: "Favourites",
       link: "favourites",
       icon: <CiHeart />,
-      count:1
+      count: 1,
     },
     {
       title: "Messages",
       link: "messages",
       icon: <FiMessageSquare />,
-      count:1
+      count: 1,
     },
     {
       title: "My Orders",
       link: "myorders",
       icon: <CiViewList />,
-      count:1
+      count: 1,
     },
     {
       title: "Settings",
@@ -366,8 +368,60 @@ export default function ContextShares({ children }) {
       icon: <IoMdSettings />,
     },
     {
-      link:"package"
-    }
+      title: "Package",
+      link: "package",
+      icon: <GoPackage />,
+    },
+  ];
+
+  const packageList = [
+    {
+      title: "Standard",
+      price: "5.00",
+      mostPopular: false,
+      informations: ["Duration: 7 Days"],
+    },
+    {
+      title: "Featured",
+      price: "9.00",
+      mostPopular: true,
+      informations: ["Duration: 14 Days", "Featured: 3 Days"],
+    },
+    {
+      title: "Featured Max",
+      price: "19.00",
+      mostPopular: false,
+      informations: [
+        "Duration: 30 Days",
+        "Featured: 7 Days",
+        "BumpUp: 2x",
+        "BumpUpEvery: 10 Days",
+      ],
+    },
+    {
+      title: "Package Standard",
+      price: "49.00",
+      mostPopular: false,
+      informations: [
+        " Ads: 5x",
+        "Duration: 30 Days",
+        "Featured: 7 Days",
+        "BumpUp: 2x",
+        "BumpUpEvery: 10 Days",
+      ],
+    },
+    {
+      title: "Package Featured",
+      price: "49.00",
+      mostPopular: false,
+      informations: [
+        " Ads: 20x",
+        " Duration: 30 Days",
+        "Featured: 7 Days",
+        "BumpUp: 2x",
+        "BumpUpEvery: 10 Days",
+      ],
+    },
   ];
 
   const updatedLists = lists.map((listItem) => {
@@ -384,6 +438,7 @@ export default function ContextShares({ children }) {
   const [discoverData, setDiscoverData] = useState(dicoverDataAll);
   const [loggedNavigationList, setLoggedNavigationList] =
     useState(LoggedNavigationData);
+  const [packageListData, setPackageListData] = useState(packageList);
 
   return (
     <div>
@@ -404,7 +459,11 @@ export default function ContextShares({ children }) {
                   <loggedNavigationListContext.Provider
                     value={{ loggedNavigationList, setLoggedNavigationList }}
                   >
-                    {children}
+                    <packageListContext.Provider
+                      value={{ packageListData, setPackageListData }}
+                    >
+                      {children}
+                    </packageListContext.Provider>
                   </loggedNavigationListContext.Provider>
                 </fraudListsContext.Provider>
               </selectedFraudDetailContext.Provider>

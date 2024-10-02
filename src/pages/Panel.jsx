@@ -50,8 +50,8 @@ export default function Panel() {
         {location.pathname === "/panel/messages/" && <Messages />}
         {location.pathname === "/panel/myorders/" && <MyOrders />}
         {location.pathname === "/panel/settings/" && <Settings />}
-        {location.pathname === "/panel/package/" && <Packages />}
       </div>
+      {location.pathname === "/panel/package/" && <Packages />}
     </div>
   );
 }
