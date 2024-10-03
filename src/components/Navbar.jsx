@@ -5,6 +5,7 @@ import { HiOutlineXMark } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import { loggedNavigationListContext } from "../Context/ContextShares";
 import { IoIosAddCircleOutline, IoIosLogOut } from "react-icons/io";
+import { CiFacebook } from "react-icons/ci";
 
 export default function Navbar() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -60,7 +61,8 @@ export default function Navbar() {
     <div className="relative">
       {" "}
       {isSidebarOpen && (
-        <div className="fixed inset-0 bg-black opacity-50 z-40"></div>
+        <div className="fixed inset-0  z-40"></div>
+        // <div className="fixed inset-0 bg-black opacity-50 z-40"></div>
       )}
       <div
         ref={sidebarRef}
@@ -69,7 +71,7 @@ export default function Navbar() {
         } transition-transform duration-300 ease-in-out lg:hidden z-50`}
       >
         <div className="flex justify-around py-5 ">
-          <div className="py-3 px-4 bg-[#537cd9] font-semibold text-lg text-white rounded">
+          <div className="py-2 px-4 bg-[#537cd9] font-semibold text-lg text-white rounded">
             <Link to={`${!isLogged ? "/panel/create/" : "/report/"}`}>
               <button className="py-2 px-4">Repost Fraud +</button>
             </Link>
@@ -79,13 +81,26 @@ export default function Navbar() {
           </button>
         </div>
         <div className="bg-white ">
-          <ul className="flex flex-col justify-center items-start p-4 font-bold text-lg space-y-4 ">
+          <ul className="flex flex-col justify-center items-start p-4 font-bold text-lg  ">
             {navLinks?.map((item) => (
-              <Link to={`${item.link}/`} key={item.link}>
+              <Link
+                to={`${item.link}/`}
+                key={item.link}
+                className="border-b-2 border-gray-100 py-4 w-full"
+              >
                 <li>{item.title}</li>
               </Link>
             ))}
           </ul>
+          <div className="space-y-2 mt-10 px-5">
+            <h1 className="font-semibold text-yellow-500">Call Support</h1>
+            <h1 className="font-semibold">01777037916</h1>
+            <h1 className="font-semibold text-yellow-500">Email Address</h1>
+            <h1 className="font-semibold">hi@bdblacklist.com</h1>
+          </div>
+          <div className="px-5 mt-10">
+            <CiFacebook className="text-5xl" />
+          </div>
         </div>
       </div>
       {/* Navbar */}

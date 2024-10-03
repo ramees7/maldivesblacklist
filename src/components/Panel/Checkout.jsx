@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PhoneInput from "react-phone-input-2";
+import { packageListContext } from "../../Context/ContextShares";
 
 export default function Checkout() {
   const [openCode, setOpenCode] = useState(false);
   const [phone, setPhone] = useState("");
+  const { packageListData, setPackageListData } =
+    useContext(packageListContext);
+
+  const packageId = sessionStorage.getItem("choosedPackageId");
+
+  const packageData = packageListData?.filter((item, ind) => ind == packageId);
 
   const handleCodeOpen = () => {
     if (openCode === true) {
@@ -19,7 +26,7 @@ export default function Checkout() {
       </div>
       <div className="py-20 bg-[#f2f2f2] xl:px-48 lg:px-20 md:px-12 px-10 ">
         <div className="max-w-[700px] mx-auto">
-          <h1 className="mb-4 text-lg font-semibold">
+          <h1 className="mb-4 md:text-lg text-base font-semibold">
             Have a discount code?{" "}
             <button
               className="border-0  underline text-[#537cd9]"
@@ -34,7 +41,7 @@ export default function Checkout() {
                 <input
                   type="text"
                   className=" w-[600px] h-[50px] border-2 rounded-lg px-3 text-black focus:outline-none focus:ring-0"
-                  placeholder="Enter your name"
+                  placeholder="Coupen Code"
                 />
                 <div className="bg-[#537cd9] w-fit h-[50px] font-semibold text-lg text-white rounded">
                   <button
@@ -47,12 +54,12 @@ export default function Checkout() {
               </form>
             </div>
           )}
-          <div className="bg-white p-8 mt-8  rounded-lg">
+          <div className="bg-white px-8 py-12 mt-8  rounded-lg">
             <form className=" grid grid-cols-2 gap-x-8 gap-y-4">
               {/* Facebook */}
               <div className="col-span-2 lg:col-span-1">
                 <label htmlFor="firstname" className="font-semibold">
-                  First name *
+                  First name
                 </label>
                 <div className="flex items-center  mt-3 bg-white p-3 border-2 border-gray-300 rounded-lg">
                   <input
@@ -210,6 +217,32 @@ export default function Checkout() {
                 </div>
               </div>
             </form>
+          </div>
+          <div className=" mt-8">
+            <div className="p-8 bg-white rounded-t-lg ">
+              <div className="flex justify-between items-center border-dotted border-b-2 py-4 text-lg">
+                <h1 className="font-semibold text-gray-500">Package title</h1>
+                <h1 className="font-bold">ރ{packageData[0]?.price}</h1>
+              </div>
+              <div className="flex justify-between items-center py-4 text-lg">
+                <h1 className="font-semibold text-gray-500">Subtotal:</h1>
+                <h1 className="font-bold">ރ{packageData[0]?.price}</h1>
+              </div>
+            </div>
+            <div className="px-8 py-5 bg-yellow-500 text-white rounded-b-lg flex justify-between items-center">
+              <h1 className="font-semibold text-lg">Total:</h1>
+              <h1 className="font-bold text-xl">ރ{packageData[0]?.price}</h1>
+            </div>
+          </div>
+          <div className="flex justify-center col-span-2 pt-10 border-t-[1px]">
+            <div className="bg-[#537cd9] w-fit font-semibold text-lg text-white rounded">
+              <button
+                type="submit"
+                className="py-3 px-6 flex gap-x-4 items-center"
+              >
+                Place Order
+              </button>
+            </div>
           </div>
         </div>
       </div>

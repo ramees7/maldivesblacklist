@@ -12,6 +12,7 @@ export default function Packages() {
   const choosePackage = (index) => {
     const updatedPackages = packageListData.map((item, i) => {
       setChoosed(index)
+      sessionStorage.setItem("choosedPackageId",index)
       return { ...item, isChoosed: i === index };
     });
     setPackageListData(updatedPackages);

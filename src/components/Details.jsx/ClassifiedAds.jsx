@@ -66,7 +66,7 @@ export default function ClassifiedAds({ allData, searchTerm }) {
       );
     }
     setFilteredFraudData(sortedData);
-  }, [sortOption, filteredFraudData]);
+  }, [sortOption]);
   // }, [sortOption]);
 
   useEffect(() => {
@@ -86,7 +86,10 @@ export default function ClassifiedAds({ allData, searchTerm }) {
 
   useEffect(() => {
     if (filteredFraudData.length === 0 && allData.length > 0) {
-      setFilteredFraudData([]);
+      // Only set filteredFraudData if it hasn't already been set to allData
+      if (filteredFraudData !== allData) {
+        setFilteredFraudData(allData);
+      }
     }
   }, [filteredFraudData, allData]);
 
@@ -108,12 +111,10 @@ export default function ClassifiedAds({ allData, searchTerm }) {
 
   const resultsCount = filteredFraudData.length;
 
-  
   const handleClose = () => {
     navigate("/ads/all/");
     setSelectedType("");
   };
-  
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
